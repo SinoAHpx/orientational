@@ -1,23 +1,18 @@
-import {
-    Badge,
-    Button,
-    Card,
-    Divider,
-    Input,
-    Menu,
-    MenuButtonProps,
-    MenuTrigger,
-    SplitButton,
-} from "@fluentui/react-components";
+import { Badge, Button, Card, Input } from "@fluentui/react-components";
 import { AddRegular, SearchRegular } from "@fluentui/react-icons";
 import Flex from "../Universal/Flex";
 
-export default function HomeBar() {
+interface HomeBarProps {
+    style?: React.CSSProperties;
+}
+
+export default function HomeBar({ style }: HomeBarProps) {
     return (
         <>
             <Card
                 size="large"
                 style={{
+                    ...style,
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "space-between",
