@@ -10,6 +10,7 @@ import {
     makeStyles,
 } from "@fluentui/react-components";
 import { useMemo } from "react";
+import Class from "./Class";
 
 /**
  * Generates a sequence of time strings from 6:00 to 23:00.
@@ -61,9 +62,11 @@ export default function ClassesViewer({
     const timeSequence: string[] = useMemo(() => getTimeSequence(), []);
     const styles = useStyle();
     return (
-        <div style={{
-            ...style,
-        }}>
+        <div
+            style={{
+                ...style,
+            }}
+        >
             <Table
                 style={{
                     width: "150vw",
@@ -79,12 +82,13 @@ export default function ClassesViewer({
                 <TableBody>
                     <TableRow className={styles.cell}>
                         <TableCell colSpan={5}>
-                            <Card onClick={() => {}}>
-                                <CardHeader header="Introduction to React" />
-                                <Text>Professor: Dr. Smith</Text>
-                                <Text>Room: CS-101</Text>
-                                <Text>Seats: 30/40</Text>
-                            </Card>
+                            <Class
+                                title="数据结构"
+                                teacher="王教授"
+                                schedule="09:30-10:40"
+                                room="计算机楼-101"
+                                onClick={() => {}}
+                            />
                         </TableCell>
                     </TableRow>
                     <TableRow className={styles.cell}>
@@ -92,78 +96,13 @@ export default function ClassesViewer({
                         <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell colSpan={5}>
-                            <Card onClick={() => {}}>
-                                <CardHeader header="Advanced JavaScript" />
-                                <Text>Professor: Dr. Johnson</Text>
-                                <Text>Room: CS-202</Text>
-                                <Text>Seats: 25/35</Text>
-                            </Card>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow className={styles.cell}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell colSpan={5}>
-                            <Card onClick={() => {}}>
-                                <CardHeader header="Web Development" />
-                                <Text>Professor: Dr. Williams</Text>
-                                <Text>Room: CS-305</Text>
-                                <Text>Seats: 40/50</Text>
-                            </Card>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow className={styles.cell}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell colSpan={5}>
-                            <Card onClick={() => {}}>
-                                <CardHeader header="Database Systems" />
-                                <Text>Professor: Dr. Brown</Text>
-                                <Text>Room: CS-401</Text>
-                                <Text>Seats: 35/45</Text>
-                            </Card>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow className={styles.cell}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell colSpan={5}>
-                            <Card onClick={() => {}}>
-                                <CardHeader header="Software Engineering" />
-                                <Text>Professor: Dr. Davis</Text>
-                                <Text>Room: CS-203</Text>
-                                <Text>Seats: 28/35</Text>
-                            </Card>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow className={styles.cell}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell colSpan={5}>
-                            <Card onClick={() => {}}>
-                                <CardHeader header="Data Structures" />
-                                <Text>Professor: Dr. Miller</Text>
-                                <Text>Room: CS-102</Text>
-                                <Text>Seats: 32/40</Text>
-                            </Card>
+                            <Class
+                                title="高级JavaScript编程"
+                                teacher="李教授"
+                                schedule="10:25-11:35"
+                                room="计算机楼-202"
+                                onClick={() => {}}
+                            />
                         </TableCell>
                     </TableRow>
                     <TableRow className={styles.cell}>
@@ -175,13 +114,84 @@ export default function ClassesViewer({
                         <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
                         <TableCell colSpan={5}>
-                            <Card onClick={() => {}}>
-                                <CardHeader header="Computer Networks" />
-                                <Text>Professor: Dr. Wilson</Text>
-                                <Text>Room: CS-304</Text>
-                                <Text>Seats: 38/45</Text>
-                            </Card>
+                            <Class
+                                title="网络开发"
+                                teacher="张教授"
+                                schedule="11:40-12:50"
+                                room="计算机楼-305"
+                                onClick={() => {}}
+                            />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow className={styles.cell}>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell colSpan={5}>
+                            <Class
+                                title="数据库系统"
+                                teacher="刘教授"
+                                schedule="13:35-14:45"
+                                room="计算机楼-401"
+                                onClick={() => {}}
+                            />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow className={styles.cell}>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell colSpan={5}>
+                            <Class
+                                title="软件工程"
+                                teacher="陈教授"
+                                schedule="14:28-15:35"
+                                room="计算机楼-203"
+                                onClick={() => {}}
+                            />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow className={styles.cell}>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell colSpan={5}>
+                            <Class
+                                title="数据结构"
+                                teacher="吴教授"
+                                schedule="15:32-16:40"
+                                room="计算机楼-102"
+                                onClick={() => {}}
+                            />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow className={styles.cell}>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell colSpan={5}>
+                            <Class
+                                title="计算机网络"
+                                teacher="赵教授"
+                                schedule="16:38-17:45"
+                                room="计算机楼-304"
+                                onClick={() => {}}
+                            />
                         </TableCell>
                     </TableRow>
                 </TableBody>
