@@ -9,11 +9,13 @@ export default function Home() {
             left: 0,
             right: 0,
             width: '98vw',
+            height: '75px',
             margin: 'auto',
         }}></HomeBar>
         <ClassesViewer style={{
             marginTop: '10px',
-            overflowX: 'auto'
+            overflowX: 'auto',
+            height: 'calc(100vh - 115px)',
         }}></ClassesViewer>
     </>;
 }
