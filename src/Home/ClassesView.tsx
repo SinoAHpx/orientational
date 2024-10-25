@@ -1,7 +1,4 @@
 import {
-    Card,
-    CardHeader,
-    Text,
     Table,
     TableBody,
     TableCell,

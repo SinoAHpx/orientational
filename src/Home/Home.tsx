@@ -1,5 +1,6 @@
 import ClassesViewer from "./ClassesView";
 import HomeBar from "./HomeBar";
+import WeekDaysView from "./WeekDaysView";
 
 export default function Home() {
     return (
@@ -15,13 +16,24 @@ export default function Home() {
                     margin: "auto",
                 }}
             />
-            <ClassesViewer
+            <div
                 style={{
-                    marginTop: "10px",
+                    display: "flex",
+                    flexDirection: "row",
+                    margin: '0px',
+                    padding: '0px',
                     overflowX: "auto",
-                    height: "calc(100vh - 115px)"
                 }}
-            />
+            >
+                <WeekDaysView />
+                <div style={{ flex: 1 }}>
+                    <ClassesViewer
+                        style={{
+                            height: "calc(100vh - 120px)",
+                        }}
+                    />
+                </div>
+            </div>
         </>
     );
 }
