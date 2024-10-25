@@ -19,7 +19,7 @@ import Class from "./Class";
  */
 const getTimeSequence = () => {
     const times = [];
-    for (let hour = 6; hour < 24; hour++) {
+    for (let hour = 7; hour < 23; hour++) {
         const formattedTime = `${hour}:00`;
         times.push(formattedTime);
     }
@@ -70,6 +70,8 @@ export default function ClassesViewer({
             <Table
                 style={{
                     width: "150vw",
+                    maxWidth: "max(2000px, 98vw)",
+                    margin: "auto",
                 }}
             >
                 <TableHeader>
@@ -133,7 +135,6 @@ export default function ClassesViewer({
                         <TableCell colSpan={5}>
                             <Class
                                 title="数据库系统"
-                                teacher="刘教授"
                                 schedule="13:35-14:45"
                                 room="计算机楼-401"
                                 onClick={() => {}}
@@ -158,13 +159,6 @@ export default function ClassesViewer({
                         </TableCell>
                     </TableRow>
                     <TableRow className={styles.cell}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
                         <TableCell colSpan={5}>
                             <Class
                                 title="数据结构"
@@ -175,7 +169,9 @@ export default function ClassesViewer({
                             />
                         </TableCell>
                     </TableRow>
-                    <TableRow className={styles.cell}>
+                    <TableRow className={styles.cell} style={{
+                        borderBottom: 'none'
+                    }}>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell></TableCell>

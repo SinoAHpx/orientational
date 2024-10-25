@@ -12,21 +12,24 @@ import Flex from "../Universal/Flex";
 export default function Class({
     title,
     room,
-    teacher,
+    teacher = null,
     schedule,
     onClick,
 }: {
     title: string;
     room: string;
-    teacher: string;
+    teacher?: string | null;
     schedule: string;
     onClick?: () => void;
 }) {
     return (
-        <Card onClick={onClick} style={{
-            margin: '20px',
-            height: '107px'
-        }}>
+        <Card
+            onClick={onClick}
+            style={{
+                margin: "20px",
+                height: "105px",
+            }}
+        >
             <CardHeader
                 action={
                     <Button
@@ -45,20 +48,24 @@ export default function Class({
                 >
                     <Subtitle2>{room}</Subtitle2>
                 </Badge>
-                <Badge color="informative"
+                <Badge
+                    color="informative"
                     style={{
                         padding: "15px",
                     }}
                 >
                     <Subtitle2>{schedule}</Subtitle2>
                 </Badge>
-                <Badge color="success"
-                    style={{
-                        padding: "15px",
-                    }}
-                >
-                    <Subtitle2>{teacher}</Subtitle2>
-                </Badge>
+                {teacher && (
+                    <Badge
+                        color="success"
+                        style={{
+                            padding: "15px",
+                        }}
+                    >
+                        <Subtitle2>{teacher}</Subtitle2>
+                    </Badge>
+                )}
             </Flex>
         </Card>
     );
