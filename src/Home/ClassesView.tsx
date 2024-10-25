@@ -20,12 +20,23 @@ const getTimeSequence = () => {
         const formattedTime = `${hour}:00`;
         times.push(formattedTime);
     }
-    //18 items
+    //32 items
     return times;
 };
 
+const getColSpanBySchedule = (startTime: string, endTime: string) => {
+    const start = startTime.split(':')
+    const end = endTime.split(":")
+    
+    const startSeconds = parseInt(start[0]) * 3600 + parseInt(start[1]) * 60
+    const endSeconds = parseInt(end[0]) * 3600 + parseInt(end[1]) * 60
+    const gapSeconds = endSeconds - startSeconds
+    const gapHours = Math.floor(gapSeconds / 3600)
+    return gapHours + 1
+};
+
 const useStyle = makeStyles({
-    cell: {
+    row: {
         ":hover": {
             cursor: "default",
             backgroundColor: "inherit",
@@ -53,11 +64,60 @@ const useStyle = makeStyles({
 
 export default function ClassesViewer({
     style,
+    classes,
 }: {
     style?: React.CSSProperties;
+    classes: {
+        title: string;
+        room: string;
+        teacher?: string | null;
+        startTime: string;
+        endTime: string;
+        weekday: string;
+    }[];
 }) {
     const timeSequence: string[] = useMemo(() => getTimeSequence(), []);
     const styles = useStyle();
+    const [
+        mondayClasses,
+        tuesdayClasses,
+        wednesdayClasses,
+        thursdayClasses,
+        fridayClasses,
+        saturdayClasses,
+        sundayClasses,
+    ] = useMemo(() => {
+        const classesByDay = classes.reduce((acc, cls) => {
+            acc[cls.weekday] = acc[cls.weekday] || [];
+            acc[cls.weekday].push(cls);
+            return acc;
+        }, {} as Record<string, typeof classes>);
+
+        const result = [
+            classesByDay["Monday"] || [],
+            classesByDay["Tuesday"] || [],
+            classesByDay["Wednesday"] || [],
+            classesByDay["Thursday"] || [],
+            classesByDay["Friday"] || [],
+            classesByDay["Saturday"] || [],
+            classesByDay["Sunday"] || [],
+        ].map((classes) =>
+            classes.map((cls) => (
+                <TableCell
+                    colSpan={getColSpanBySchedule(cls.startTime, cls.endTime)}
+                >
+                    <Class
+                        onClick={() => {}}
+                        key={`${cls.title}-${cls.startTime}-${cls.endTime}`}
+                        data={cls}
+                    />
+                </TableCell>
+            ))
+        );
+        
+        return result;
+    }, [classes]);
+
     return (
         <div
             style={{
@@ -66,9 +126,10 @@ export default function ClassesViewer({
         >
             <Table
                 style={{
-                    width: "150vw",
-                    maxWidth: "max(2000px, 98vw)",
+                    width: "200vw",
+                    maxWidth: "max(12000px, 98vw)",
                     margin: "auto",
+                    userSelect: "none",
                 }}
             >
                 <TableHeader>
@@ -79,113 +140,25 @@ export default function ClassesViewer({
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow className={styles.cell}>
-                        <TableCell colSpan={5}>
-                            <Class
-                                title="数据结构"
-                                teacher="王教授"
-                                schedule="09:30-10:40"
-                                room="计算机楼-101"
-                                onClick={() => {}}
-                            />
-                        </TableCell>
+                    <TableRow className={styles.row}>{mondayClasses}</TableRow>
+                    <TableRow className={styles.row}>{tuesdayClasses}</TableRow>
+                    <TableRow className={styles.row}>
+                        {wednesdayClasses}
                     </TableRow>
-                    <TableRow className={styles.cell}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell colSpan={5}>
-                            <Class
-                                title="高级JavaScript编程"
-                                teacher="李教授"
-                                schedule="10:25-11:35"
-                                room="计算机楼-202"
-                                onClick={() => {}}
-                            />
-                        </TableCell>
+                    <TableRow className={styles.row}>
+                        {thursdayClasses}
                     </TableRow>
-                    <TableRow className={styles.cell}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell colSpan={5}>
-                            <Class
-                                title="网络开发"
-                                teacher="张教授"
-                                schedule="11:40-12:50"
-                                room="计算机楼-305"
-                                onClick={() => {}}
-                            />
-                        </TableCell>
+                    <TableRow className={styles.row}>{fridayClasses}</TableRow>
+                    <TableRow className={styles.row}>
+                        {saturdayClasses}
                     </TableRow>
-                    <TableRow className={styles.cell}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell colSpan={5}>
-                            <Class
-                                title="数据库系统"
-                                schedule="13:35-14:45"
-                                room="计算机楼-401"
-                                onClick={() => {}}
-                            />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow className={styles.cell}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell colSpan={5}>
-                            <Class
-                                title="软件工程"
-                                teacher="陈教授"
-                                schedule="14:28-15:35"
-                                room="计算机楼-203"
-                                onClick={() => {}}
-                            />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow className={styles.cell}>
-                        <TableCell colSpan={5}>
-                            <Class
-                                title="数据结构"
-                                teacher="吴教授"
-                                schedule="15:32-16:40"
-                                room="计算机楼-102"
-                                onClick={() => {}}
-                            />
-                        </TableCell>
-                    </TableRow>
-                    <TableRow className={styles.cell} style={{
-                        borderBottom: 'none'
-                    }}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell colSpan={5}>
-                            <Class
-                                title="计算机网络"
-                                teacher="赵教授"
-                                schedule="16:38-17:45"
-                                room="计算机楼-304"
-                                onClick={() => {}}
-                            />
-                        </TableCell>
+                    <TableRow
+                        className={styles.row}
+                        style={{
+                            borderBottom: "none",
+                        }}
+                    >
+                        {sundayClasses}
                     </TableRow>
                 </TableBody>
             </Table>

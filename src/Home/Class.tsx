@@ -10,16 +10,17 @@ import { MoreHorizontal20Regular } from "@fluentui/react-icons";
 import Flex from "../Universal/Flex";
 
 export default function Class({
-    title,
-    room,
-    teacher = null,
-    schedule,
+    data,
     onClick,
 }: {
-    title: string;
-    room: string;
-    teacher?: string | null;
-    schedule: string;
+    data: {
+        title: string;
+        room: string;
+        teacher?: string | null;
+        startTime: string;
+        endTime: string;
+        weekday: string;
+    };
     onClick?: () => void;
 }) {
     return (
@@ -38,7 +39,7 @@ export default function Class({
                         aria-label="More options"
                     />
                 }
-                header={<Title3>{title}</Title3>}
+                header={<Title3>{data.title}</Title3>}
             />
             <Flex gap="10px" alignItems="center">
                 <Badge
@@ -46,7 +47,7 @@ export default function Class({
                         padding: "15px",
                     }}
                 >
-                    <Subtitle2>{room}</Subtitle2>
+                    <Subtitle2>{data.room}</Subtitle2>
                 </Badge>
                 <Badge
                     color="informative"
@@ -54,16 +55,16 @@ export default function Class({
                         padding: "15px",
                     }}
                 >
-                    <Subtitle2>{schedule}</Subtitle2>
+                    <Subtitle2>{data.startTime} - {data.endTime}</Subtitle2>
                 </Badge>
-                {teacher && (
+                {data.teacher && (
                     <Badge
                         color="success"
                         style={{
                             padding: "15px",
                         }}
                     >
-                        <Subtitle2>{teacher}</Subtitle2>
+                        <Subtitle2>{data.teacher}</Subtitle2>
                     </Badge>
                 )}
             </Flex>

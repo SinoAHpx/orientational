@@ -1,8 +1,17 @@
+import { useEffect, useState } from "react";
 import ClassesViewer from "./ClassesView";
 import HomeBar from "./HomeBar";
 import WeekDaysView from "./WeekDaysView";
 
 export default function Home() {
+    const [classes, setClasses] = useState([])
+    useEffect(() => {
+        //this is just mocking data, wait to fetch from real API
+        fetch('../public/mocking.json')
+            .then((response) => response.json())
+            .then((json) => setClasses(json))
+    }, [])
+    
     return (
         <>
             <HomeBar
@@ -31,6 +40,7 @@ export default function Home() {
                         style={{
                             height: "calc(100vh - 120px)",
                         }}
+                        classes={classes}
                     />
                 </div>
             </div>
