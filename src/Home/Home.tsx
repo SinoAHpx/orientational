@@ -7,10 +7,10 @@ export default function Home() {
     const [classes, setClasses] = useState([])
     useEffect(() => {
         //this is just mocking data, wait to fetch from real API
-        fetch('../public/mocking.json')
+        fetch('./mocking.json')
             .then((response) => response.json())
             .then((json) => setClasses(json))
-    }, [])
+    }, [classes])
     
     return (
         <>
