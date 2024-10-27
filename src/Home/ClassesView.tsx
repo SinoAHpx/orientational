@@ -8,31 +8,81 @@ import {
 } from "@fluentui/react-components";
 import { useMemo } from "react";
 import Class from "./Class";
+import { ClassData } from "../models/class-data.model";
 
-/**
- * Generates a sequence of time strings from 6:00 to 23:00.
- *
- * @returns {string[]} An array of time strings in the format "HH:00".
- */
-const getTimeSequence = () => {
+const timeSequence = (() => {
     const times = [];
     for (let hour = 7; hour < 23; hour++) {
-        const formattedTime = `${hour}:00`;
-        times.push(formattedTime);
+        times.push(`${hour}:00`);
+        times.push(`${hour}:30`);
     }
-    //32 items
     return times;
+})();
+
+const getClassOccupiedSpaces = (cls: ClassData) => {
+    const start = cls.startTime.split(":");
+    const end = cls.endTime.split(":");
+    const startSeconds = parseInt(start[0]) * 3600 + parseInt(start[1]) * 60;
+    const endSeconds = parseInt(end[0]) * 3600 + parseInt(end[1]) * 60;
+    const gapSeconds = endSeconds - startSeconds;
+
+    const spaces = Math.floor(gapSeconds / 1800);
+    return spaces + 1;
 };
 
-const getColSpanBySchedule = (startTime: string, endTime: string) => {
-    const start = startTime.split(':')
-    const end = endTime.split(":")
-    
-    const startSeconds = parseInt(start[0]) * 3600 + parseInt(start[1]) * 60
-    const endSeconds = parseInt(end[0]) * 3600 + parseInt(end[1]) * 60
-    const gapSeconds = endSeconds - startSeconds
-    const gapHours = Math.floor(gapSeconds / 3600)
-    return gapHours + 1
+const getRoundedTime = (time: string) => {
+    const [hours, minutes] = time.split(":").map((s) => parseInt(s));
+    const roundedMinutes = minutes >= 30 ? "30" : "00";
+    return `${hours}:${roundedMinutes}`;
+};
+
+const getFilledRow = (weekdayClasses: ClassData[]): JSX.Element[] => {
+    const cells = [];
+
+    for (const cls of weekdayClasses) {
+        const currentClassIndex = weekdayClasses.indexOf(cls);
+        const classSpaces = getClassOccupiedSpaces(cls);
+        const spaces =
+            currentClassIndex == 0
+                ? timeSequence.indexOf(getRoundedTime(cls.startTime))
+                : timeSequence.indexOf(getRoundedTime(cls.startTime)) -
+                  timeSequence.indexOf(
+                      getRoundedTime(
+                          weekdayClasses[currentClassIndex - 1].startTime
+                      )
+                  ) -
+                  classSpaces;
+
+        for (let index = 0; index < spaces; index++) {
+            cells.push(<TableCell />);
+        }
+        cells.push(
+            <TableCell colSpan={classSpaces}>
+                <Class onClick={() => {}} data={cls} />
+            </TableCell>
+        );
+    }
+    return cells;
+};
+
+const getWeekdayRows = (classes: ClassData[]) => {
+    const classesByDay = classes.reduce((acc, cls) => {
+        acc[cls.weekday] = acc[cls.weekday] || [];
+        acc[cls.weekday].push(cls);
+        return acc;
+    }, {} as Record<string, typeof classes>);
+
+    const result = [
+        classesByDay["Monday"] || [],
+        classesByDay["Tuesday"] || [],
+        classesByDay["Wednesday"] || [],
+        classesByDay["Thursday"] || [],
+        classesByDay["Friday"] || [],
+        classesByDay["Saturday"] || [],
+        classesByDay["Sunday"] || [],
+    ].map((classes) => getFilledRow(classes));
+
+    return result;
 };
 
 const useStyle = makeStyles({
@@ -67,17 +117,12 @@ export default function ClassesViewer({
     classes,
 }: {
     style?: React.CSSProperties;
-    classes: {
-        title: string;
-        room: string;
-        teacher?: string | null;
-        startTime: string;
-        endTime: string;
-        weekday: string;
-    }[];
+    classes: ClassData[];
 }) {
-    const timeSequence: string[] = useMemo(() => getTimeSequence(), []);
     const styles = useStyle();
+
+    //this seems to be complicated, however its main purpose is to
+    //convert classes into respective weekdays bunches
     const [
         mondayClasses,
         tuesdayClasses,
@@ -86,37 +131,7 @@ export default function ClassesViewer({
         fridayClasses,
         saturdayClasses,
         sundayClasses,
-    ] = useMemo(() => {
-        const classesByDay = classes.reduce((acc, cls) => {
-            acc[cls.weekday] = acc[cls.weekday] || [];
-            acc[cls.weekday].push(cls);
-            return acc;
-        }, {} as Record<string, typeof classes>);
-
-        const result = [
-            classesByDay["Monday"] || [],
-            classesByDay["Tuesday"] || [],
-            classesByDay["Wednesday"] || [],
-            classesByDay["Thursday"] || [],
-            classesByDay["Friday"] || [],
-            classesByDay["Saturday"] || [],
-            classesByDay["Sunday"] || [],
-        ].map((classes) =>
-            classes.map((cls) => (
-                <TableCell
-                    colSpan={getColSpanBySchedule(cls.startTime, cls.endTime)}
-                >
-                    <Class
-                        onClick={() => {}}
-                        key={`${cls.title}-${cls.startTime}-${cls.endTime}`}
-                        data={cls}
-                    />
-                </TableCell>
-            ))
-        );
-        
-        return result;
-    }, [classes]);
+    ] = useMemo(() => getWeekdayRows(classes), [classes]);
 
     return (
         <div
@@ -126,7 +141,7 @@ export default function ClassesViewer({
         >
             <Table
                 style={{
-                    width: "200vw",
+                    width: "800vw",
                     maxWidth: "max(12000px, 98vw)",
                     margin: "auto",
                     userSelect: "none",

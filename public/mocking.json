@@ -8,14 +8,6 @@
         "weekday": "Monday"
     },
     {
-        "title": "高级JavaScript编程", 
-        "teacher": "李教授",
-        "startTime": "10:25",
-        "endTime": "11:35",
-        "room": "计算机楼-202",
-        "weekday": "Monday"
-    },
-    {
         "title": "计算机网络",
         "teacher": "张教授",
         "startTime": "14:00",

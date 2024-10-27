@@ -8,19 +8,13 @@ import {
 } from "@fluentui/react-components";
 import { MoreHorizontal20Regular } from "@fluentui/react-icons";
 import Flex from "../Universal/Flex";
+import { ClassData } from "../models/class-data.model";
 
 export default function Class({
     data,
     onClick,
 }: {
-    data: {
-        title: string;
-        room: string;
-        teacher?: string | null;
-        startTime: string;
-        endTime: string;
-        weekday: string;
-    };
+    data: ClassData;
     onClick?: () => void;
 }) {
     return (
