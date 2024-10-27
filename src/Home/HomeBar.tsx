@@ -19,7 +19,7 @@ export default function HomeBar({ style }: HomeBarProps) {
                 }}
             >
                 <Flex gap="15px">
-                    <Badge color="informative" style={{ padding: "20px" }}>
+                    <Badge color="informative" style={{ padding: "20px", alignSelf: 'center' }}>
                         {new Date().toLocaleString("en-US", {
                             month: "long",
                             day: "numeric",

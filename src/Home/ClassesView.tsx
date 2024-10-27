@@ -66,6 +66,8 @@ const getFilledRow = (weekdayClasses: ClassData[]): JSX.Element[] => {
 };
 
 const getWeekdayRows = (classes: ClassData[]) => {
+    //this seems to be complicated, however its main purpose is to
+    //convert classes into respective weekdays bunches
     const classesByDay = classes.reduce((acc, cls) => {
         acc[cls.weekday] = acc[cls.weekday] || [];
         acc[cls.weekday].push(cls);
@@ -121,8 +123,7 @@ export default function ClassesViewer({
 }) {
     const styles = useStyle();
 
-    //this seems to be complicated, however its main purpose is to
-    //convert classes into respective weekdays bunches
+
     const [
         mondayClasses,
         tuesdayClasses,
@@ -141,8 +142,8 @@ export default function ClassesViewer({
         >
             <Table
                 style={{
-                    width: "800vw",
-                    maxWidth: "max(12000px, 98vw)",
+                    width: "400vw",
+                    maxWidth: "max(5000px, 98vw)",
                     margin: "auto",
                     userSelect: "none",
                 }}
