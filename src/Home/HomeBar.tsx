@@ -1,4 +1,10 @@
-import { Badge, Button, Card, Input } from "@fluentui/react-components";
+import {
+    Badge,
+    Button,
+    Card,
+    DialogTrigger,
+    Input,
+} from "@fluentui/react-components";
 import { AddRegular, SearchRegular } from "@fluentui/react-icons";
 import Flex from "../Universal/Flex";
 
@@ -7,6 +13,8 @@ interface HomeBarProps {
 }
 
 export default function HomeBar({ style }: HomeBarProps) {
+    const handleAddClick = () => {};
+
     return (
         <>
             <Card
@@ -19,7 +27,10 @@ export default function HomeBar({ style }: HomeBarProps) {
                 }}
             >
                 <Flex gap="15px">
-                    <Badge color="informative" style={{ padding: "20px", alignSelf: 'center' }}>
+                    <Badge
+                        color="informative"
+                        style={{ padding: "20px", alignSelf: "center" }}
+                    >
                         {new Date().toLocaleString("en-US", {
                             month: "long",
                             day: "numeric",
@@ -27,9 +38,15 @@ export default function HomeBar({ style }: HomeBarProps) {
                         {/*todo: the week is actually mocking*/}, Week 7
                     </Badge>
 
-                    <Button icon={<AddRegular />} appearance="primary">
-                        Add
-                    </Button>
+                    <DialogTrigger>
+                        <Button
+                            icon={<AddRegular />}
+                            appearance="primary"
+                            onClick={handleAddClick}
+                        >
+                            Add
+                        </Button>
+                    </DialogTrigger>
                 </Flex>
 
                 <Flex gap="15px">
