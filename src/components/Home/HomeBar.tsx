@@ -6,9 +6,9 @@ import {
     Input,
 } from "@fluentui/react-components";
 import { AddRegular, SearchRegular } from "@fluentui/react-icons";
-import Flex from "../Universal/Flex";
+import Flex from "../../Universal/Flex";
 import AddClassDialog from "../Dialogs/AddClassDialog";
-import { DialogContext } from "../models/dialog-context.model";
+import { DialogContext } from "../../models/dialog-context.model";
 import { useState } from "react";
 
 interface HomeBarProps {

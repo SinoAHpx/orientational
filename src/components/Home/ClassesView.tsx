@@ -8,7 +8,7 @@ import {
 } from "@fluentui/react-components";
 import { useMemo } from "react";
 import Class from "./Class";
-import { ClassData } from "../models/class-data.model";
+import { ClassData } from "../../models/class-data.model";
 
 const timeSequence = (() => {
     const times = [];
@@ -122,7 +122,6 @@ export default function ClassesViewer({
     classes: ClassData[];
 }) {
     const styles = useStyle();
-
 
     const [
         mondayClasses,

@@ -7,8 +7,8 @@ import {
     Title3,
 } from "@fluentui/react-components";
 import { MoreHorizontal20Regular } from "@fluentui/react-icons";
-import Flex from "../Universal/Flex";
-import { ClassData } from "../models/class-data.model";
+import Flex from "../../Universal/Flex";
+import { ClassData } from "../../models/class-data.model";
 
 export default function Class({
     data,
@@ -49,7 +49,9 @@ export default function Class({
                         padding: "15px",
                     }}
                 >
-                    <Subtitle2>{data.startTime} - {data.endTime}</Subtitle2>
+                    <Subtitle2>
+                        {data.startTime} - {data.endTime}
+                    </Subtitle2>
                 </Badge>
                 {data.teacher && (
                     <Badge

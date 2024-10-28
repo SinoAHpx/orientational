@@ -18,9 +18,9 @@ import {
     Title1,
     Title2,
 } from "@fluentui/react-components";
-import { ClassData } from "../models/class-data.model";
+import { ClassData } from "../../models/class-data.model";
 import { KeyboardEvent, MouseEvent, useState } from "react";
-import Flex from "../Universal/Flex";
+import Flex from "../../Universal/Flex";
 import { TimePicker } from "@fluentui/react-timepicker-compat";
 
 export default function AddClassDialog({
@@ -95,7 +95,7 @@ export default function AddClassDialog({
                                 <Input type="number" />
                             </Field>
                             <Field label="Class frequency">
-                                <Combobox freeform={false}>
+                                <Combobox freeform={false} defaultValue='Every week'>
                                     <Option>Every week</Option>
                                     <Option>Every 2 weeks</Option>
                                     <Option>Every 3 weeks</Option>

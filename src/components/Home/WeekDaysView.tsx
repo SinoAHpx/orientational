@@ -1,4 +1,4 @@
-import Flex from "../Universal/Flex";
+import Flex from "../../Universal/Flex";
 import { Title2 } from "@fluentui/react-components";
 
 export default function WeekDaysView() {
@@ -10,7 +10,7 @@ export default function WeekDaysView() {
                 width: "150px",
                 height: "calc(100vh - 120px)",
                 justifyContent: "space-around",
-                userSelect: 'none'
+                userSelect: "none",
             }}
         >
             <Title2>Monday</Title2>
