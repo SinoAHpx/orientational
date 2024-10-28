@@ -4,14 +4,14 @@ import HomeBar from "./HomeBar";
 import WeekDaysView from "./WeekDaysView";
 
 export default function Home() {
-    const [classes, setClasses] = useState([])
+    const [classes, setClasses] = useState([]);
     useEffect(() => {
         //this is just mocking data, wait to fetch from real API
-        fetch('./mocking.json')
+        fetch("./mocking.json")
             .then((response) => response.json())
-            .then((json) => setClasses(json))
-    }, [classes])
-    
+            .then((json) => setClasses(json));
+    }, [classes]);
+
     return (
         <>
             <HomeBar
@@ -29,8 +29,8 @@ export default function Home() {
                 style={{
                     display: "flex",
                     flexDirection: "row",
-                    margin: '0px',
-                    padding: '0px',
+                    margin: "0px",
+                    padding: "0px",
                     overflowX: "auto",
                 }}
             >

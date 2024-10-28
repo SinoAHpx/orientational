@@ -7,13 +7,19 @@ import {
 } from "@fluentui/react-components";
 import { AddRegular, SearchRegular } from "@fluentui/react-icons";
 import Flex from "../Universal/Flex";
+import AddClassDialog from "../Dialogs/AddClassDialog";
+import { DialogContext } from "../models/dialog-context.model";
+import { useState } from "react";
 
 interface HomeBarProps {
     style?: React.CSSProperties;
 }
 
 export default function HomeBar({ style }: HomeBarProps) {
-    const handleAddClick = () => {};
+    const [showDialog, setShowDialog] = useState(false);
+    const handleAddClick = () => {
+        setShowDialog(true);
+    };
 
     return (
         <>
@@ -38,15 +44,23 @@ export default function HomeBar({ style }: HomeBarProps) {
                         {/*todo: the week is actually mocking*/}, Week 7
                     </Badge>
 
-                    <DialogTrigger>
-                        <Button
-                            icon={<AddRegular />}
-                            appearance="primary"
-                            onClick={handleAddClick}
-                        >
-                            Add
-                        </Button>
-                    </DialogTrigger>
+                    <AddClassDialog
+                        trigger={
+                            <Button
+                                icon={<AddRegular />}
+                                appearance="primary"
+                                onClick={handleAddClick}
+                            >
+                                Add
+                            </Button>
+                        }
+                        open={showDialog}
+                        onClose={() => {}}
+                    />
+
+                    {/* <DialogTrigger>
+                        
+                    </DialogTrigger> */}
                 </Flex>
 
                 <Flex gap="15px">
