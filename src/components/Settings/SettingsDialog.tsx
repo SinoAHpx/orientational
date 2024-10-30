@@ -8,28 +8,36 @@ import {
     DialogTitle,
     DialogTrigger,
     Field,
+    Input,
     Title2,
 } from "@fluentui/react-components";
 import { DatePicker } from "@fluentui/react-datepicker-compat";
 import { useRef } from "react";
+import { Settings } from "../../models/settings.model";
+import Flex from "../../Universal/Flex";
 
 export default function SettingsDialog({
     open,
     onClose,
+    settings = null,
 }: {
     open: boolean;
-    onClose?: (firstWeek: Date | null) => void;
+    onClose?: (settings: Settings | null) => void;
+    settings?: Settings | null;
 }) {
     const firstWeekRef = useRef<HTMLInputElement>(null);
-
+    const totalWeekRef = useRef<HTMLInputElement>(null);
     return (
         <Dialog
             open={open}
-            onOpenChange={(_event, data) => {
+            onOpenChange={() => {
                 if (onClose) {
-                    onClose(
-                        data.open ? new Date(firstWeekRef.current?.value ?? '') : null
-                    );
+                    onClose({
+                        firstWeek: new Date(firstWeekRef.current?.value ?? ""),
+                        totalWeeks: parseInt(
+                            totalWeekRef.current?.value ?? "1"
+                        ),
+                    });
                 }
             }}
         >
@@ -39,9 +47,21 @@ export default function SettingsDialog({
                         <Title2>Settings</Title2>
                     </DialogTitle>
                     <DialogContent>
-                        <Field label="First week at">
-                            <DatePicker ref={firstWeekRef} />
-                        </Field>
+                        <Flex direction="column" gap="5px">
+                            <Field label="First week at">
+                                <DatePicker
+                                    ref={firstWeekRef}
+                                    value={settings?.firstWeek}
+                                />
+                            </Field>
+                            <Field label="Total weeks">
+                                <Input
+                                    type="number"
+                                    ref={totalWeekRef}
+                                    value={settings?.totalWeeks?.toString()}
+                                />
+                            </Field>
+                        </Flex>
                     </DialogContent>
                     <DialogActions>
                         <DialogTrigger action="close" disableButtonEnhancement>
