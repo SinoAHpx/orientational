@@ -8,17 +8,22 @@ import {
 import { AddRegular, SearchRegular } from "@fluentui/react-icons";
 import Flex from "../../Universal/Flex";
 import AddClassDialog from "../Dialogs/AddClassDialog";
-import { DialogContext } from "../../models/dialog-context.model";
 import { useState } from "react";
+import SettingsDialog from "../Settings/SettingsDialog";
 
 interface HomeBarProps {
     style?: React.CSSProperties;
 }
 
 export default function HomeBar({ style }: HomeBarProps) {
-    const [showDialog, setShowDialog] = useState(false);
+    const [showAddDialog, setShowAddDialog] = useState(false);
+    const [showSettingsDialog, setShowSettingsialog] = useState(false);
     const handleAddClick = () => {
-        setShowDialog(true);
+        setShowAddDialog(true);
+    };
+
+    const handleSettingClick = () => {
+        setShowSettingsialog(true);
     };
 
     return (
@@ -54,19 +59,22 @@ export default function HomeBar({ style }: HomeBarProps) {
                                 Add
                             </Button>
                         }
-                        open={showDialog}
+                        open={showAddDialog}
                         onClose={() => {}}
                     />
-
-                    {/* <DialogTrigger>
-                        
-                    </DialogTrigger> */}
                 </Flex>
 
                 <Flex gap="15px">
                     <Button>Export</Button>
                     <Button>Import</Button>
-                    <Button>Settings</Button>
+                    <SettingsDialog
+                        trigger={
+                            <Button onClick={handleSettingClick}>
+                                Settings
+                            </Button>
+                        }
+                        open={showSettingsDialog}
+                    ></SettingsDialog>
                 </Flex>
 
                 <Flex gap="15px">
