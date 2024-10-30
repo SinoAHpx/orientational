@@ -8,7 +8,7 @@ import {
 } from "@fluentui/react-components";
 import { useMemo, useState } from "react";
 import Class from "./Class";
-import { ClassData } from "../../models/class-data.model";
+import { ClassData, defaultClassData } from "../../models/class-data.model";
 import AddClassDialog from "../Dialogs/AddClassDialog";
 
 const timeSequence = (() => {
@@ -130,9 +130,8 @@ export default function ClassesViewer({
 }) {
     const styles = useStyle();
     const [showAddClassDialog, setShowAddClassDialog] = useState(false);
-    const [clickedClassData, setClickedClassData] = useState<ClassData | null>(
-        null
-    );
+    const [clickedClassData, setClickedClassData] =
+        useState<ClassData>(defaultClassData);
 
     const [
         mondayClasses,
@@ -145,8 +144,8 @@ export default function ClassesViewer({
     ] = useMemo(
         () =>
             getWeekdayRows(classes, (classData: ClassData) => {
-                setShowAddClassDialog(true);
                 setClickedClassData(classData);
+                setShowAddClassDialog(true);
             }),
         [classes]
     );

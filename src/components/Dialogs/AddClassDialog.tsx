@@ -14,8 +14,8 @@ import {
     Option,
     Title2,
 } from "@fluentui/react-components";
-import { ClassData } from "../../models/class-data.model";
-import { useRef } from "react";
+import { ClassData, defaultClassData } from "../../models/class-data.model";
+import { useEffect, useState } from "react";
 import Flex from "../../Universal/Flex";
 import { TimePicker } from "@fluentui/react-timepicker-compat";
 
@@ -28,35 +28,32 @@ export default function AddClassDialog({
     open: boolean;
     onClose?: ((data: ClassData) => void) | null;
 }) {
-    const titleRef = useRef<HTMLInputElement>(null);
-    const roomRef = useRef<HTMLInputElement>(null);
-    const startTimeRef = useRef<HTMLInputElement>(null);
-    const endTimeRef = useRef<HTMLInputElement>(null);
-    const weekdayRef = useRef<HTMLInputElement>(null);
-    const weekDurationRef = useRef<HTMLInputElement>(null);
-    const classFrequencyRef = useRef<HTMLInputElement>(null);
-    const teacherRef = useRef<HTMLInputElement>(null);
-
     const isEdit = data !== null;
+    console.log(data);
+
+    const [classData, setClassData] = useState<ClassData>(
+        data ?? {
+            title: "awd",
+            room: "",
+            startTime: "7:00",
+            endTime: "8:00",
+            weekday: "",
+            weekDuration: 1,
+            classFrequency: "weekly",
+            teacher: "",
+        }
+    );
+
+    useEffect(() => {
+        setClassData(data ?? defaultClassData);
+    }, [data]);
 
     return (
         <Dialog
             open={open}
             onOpenChange={() => {
                 if (onClose) {
-                    onClose({
-                        title: titleRef.current?.value ?? "",
-                        teacher: teacherRef.current?.value ?? null,
-                        startTime: startTimeRef.current?.value ?? "7:00",
-                        endTime: endTimeRef.current?.value ?? "8:00",
-                        room: roomRef.current?.value ?? "",
-                        weekday: weekdayRef.current?.value ?? "",
-                        weekDuration: parseInt(
-                            weekDurationRef.current?.value ?? "1"
-                        ),
-                        classFrequency:
-                            classFrequencyRef.current?.value ?? "weekly",
-                    });
+                    onClose(classData!);
                 }
             }}
         >
@@ -68,10 +65,26 @@ export default function AddClassDialog({
                     <DialogContent>
                         <Flex direction="column" gap="5px">
                             <Field label="Class title" required>
-                                <Input ref={titleRef} value={data?.title} />
+                                <Input
+                                    value={classData?.title}
+                                    onChange={(e) =>
+                                        setClassData({
+                                            ...classData,
+                                            title: e.target.value,
+                                        })
+                                    }
+                                />
                             </Field>
                             <Field label="Room / Building" required>
-                                <Input ref={roomRef} value={data?.room} />
+                                <Input
+                                    value={classData?.room}
+                                    onChange={(e) =>
+                                        setClassData({
+                                            ...classData,
+                                            room: e.target.value,
+                                        })
+                                    }
+                                />
                             </Field>
                             <Flex gap="15px">
                                 <Field
@@ -83,8 +96,13 @@ export default function AddClassDialog({
                                         increment={5}
                                         startHour={7}
                                         endHour={23}
-                                        value={data?.startTime}
-                                        ref={startTimeRef}
+                                        value={classData?.startTime}
+                                        onChange={(e) =>
+                                            setClassData({
+                                                ...classData,
+                                                startTime: e.target.value,
+                                            })
+                                        }
                                     />
                                 </Field>
                                 <Field
@@ -96,13 +114,26 @@ export default function AddClassDialog({
                                         increment={5}
                                         startHour={7}
                                         endHour={23}
-                                        value={data?.endTime}
-                                        ref={endTimeRef}
+                                        value={classData?.endTime}
+                                        onChange={(e) =>
+                                            setClassData({
+                                                ...classData,
+                                                endTime: e.target.value,
+                                            })
+                                        }
                                     />
                                 </Field>
                             </Flex>
                             <Field label="Weekday" required>
-                                <Combobox defaultValue={data?.weekday} ref={weekdayRef}>
+                                <Combobox
+                                    defaultValue={classData?.weekday}
+                                    onChange={(e) =>
+                                        setClassData({
+                                            ...classData,
+                                            weekday: e.target.value,
+                                        })
+                                    }
+                                >
                                     <Option>Monday</Option>
                                     <Option>Tuesday</Option>
                                     <Option>Wednesday</Option>
@@ -121,16 +152,27 @@ export default function AddClassDialog({
                             >
                                 <Input
                                     type="number"
-                                    value={data?.weekDuration?.toString()}
-                                    ref={weekDurationRef}
+                                    value={classData?.weekDuration?.toString()}
+                                    onChange={(e) =>
+                                        setClassData({
+                                            ...classData,
+                                            weekDuration: parseInt(
+                                                e.target.value
+                                            ),
+                                        })
+                                    }
                                 />
                             </Field>
                             <Field label="Class frequency">
                                 <Combobox
                                     freeform={false}
-                                    defaultValue="Every week"
-                                    value={data?.classFrequency}
-                                    ref={classFrequencyRef}
+                                    value={classData?.classFrequency}
+                                    onChange={(e) =>
+                                        setClassData({
+                                            ...classData,
+                                            classFrequency: e.target.value,
+                                        })
+                                    }
                                 >
                                     <Option>Every week</Option>
                                     <Option>Every 2 weeks</Option>
@@ -139,9 +181,14 @@ export default function AddClassDialog({
                             </Field>
                             <Field label="Teacher">
                                 <Input
-                                    value={data?.teacher ?? ""}
                                     placeholder="Teacher name"
-                                    ref={teacherRef}
+                                    value={classData?.teacher ?? ""}
+                                    onChange={(e) =>
+                                        setClassData({
+                                            ...classData,
+                                            teacher: e.target.value,
+                                        })
+                                    }
                                 />
                             </Field>
                         </Flex>
@@ -151,15 +198,24 @@ export default function AddClassDialog({
                             <Button appearance="secondary">Close</Button>
                         </DialogTrigger>
                         {isEdit && (
-                            <DialogTrigger action="close" disableButtonEnhancement>
-                                <Button appearance="secondary"
-                                    style={{ backgroundColor: "#da3b01", color: "white" }}
+                            <DialogTrigger
+                                action="close"
+                                disableButtonEnhancement
+                            >
+                                <Button
+                                    appearance="secondary"
+                                    style={{
+                                        backgroundColor: "#da3b01",
+                                        color: "white",
+                                    }}
                                 >
                                     Delete
                                 </Button>
                             </DialogTrigger>
                         )}
-                        <Button appearance="primary">{isEdit ? "Edit" : "Add"}</Button>
+                        <Button appearance="primary">
+                            {isEdit ? "Edit" : "Add"}
+                        </Button>
                     </DialogActions>
                 </DialogBody>
             </DialogSurface>

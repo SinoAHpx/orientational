@@ -10,7 +10,7 @@ export default function Home() {
         fetch("./mocking.json")
             .then((response) => response.json())
             .then((json) => setClasses(json));
-    }, [classes]);
+    }, []);
 
     return (
         <>
