@@ -37,6 +37,8 @@ export default function AddClassDialog({
     const classFrequencyRef = useRef<HTMLInputElement>(null);
     const teacherRef = useRef<HTMLInputElement>(null);
 
+    const isEdit = data !== null;
+
     return (
         <Dialog
             open={open}
@@ -148,7 +150,16 @@ export default function AddClassDialog({
                         <DialogTrigger action="close" disableButtonEnhancement>
                             <Button appearance="secondary">Close</Button>
                         </DialogTrigger>
-                        <Button appearance="primary">Add</Button>
+                        {isEdit && (
+                            <DialogTrigger action="close" disableButtonEnhancement>
+                                <Button appearance="secondary"
+                                    style={{ backgroundColor: "#da3b01", color: "white" }}
+                                >
+                                    Delete
+                                </Button>
+                            </DialogTrigger>
+                        )}
+                        <Button appearance="primary">{isEdit ? "Edit" : "Add"}</Button>
                     </DialogActions>
                 </DialogBody>
             </DialogSurface>
