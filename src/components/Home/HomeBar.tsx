@@ -2,7 +2,6 @@ import {
     Badge,
     Button,
     Card,
-    DialogTrigger,
     Input,
 } from "@fluentui/react-components";
 import { AddRegular, SearchRegular } from "@fluentui/react-icons";
