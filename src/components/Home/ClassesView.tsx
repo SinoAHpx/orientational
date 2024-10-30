@@ -6,9 +6,10 @@ import {
     TableRow,
     makeStyles,
 } from "@fluentui/react-components";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Class from "./Class";
 import { ClassData } from "../../models/class-data.model";
+import AddClassDialog from "../Dialogs/AddClassDialog";
 
 const timeSequence = (() => {
     const times = [];
@@ -36,7 +37,10 @@ const getRoundedTime = (time: string) => {
     return `${hours}:${roundedMinutes}`;
 };
 
-const getFilledRow = (weekdayClasses: ClassData[]): JSX.Element[] => {
+const getFilledRow = (
+    weekdayClasses: ClassData[],
+    overallClick: (classData: ClassData) => void
+): JSX.Element[] => {
     const cells = [];
 
     for (const cls of weekdayClasses) {
@@ -58,14 +62,17 @@ const getFilledRow = (weekdayClasses: ClassData[]): JSX.Element[] => {
         }
         cells.push(
             <TableCell colSpan={classSpaces}>
-                <Class onClick={() => {}} data={cls} />
+                <Class onClick={() => overallClick(cls)} data={cls} />
             </TableCell>
         );
     }
     return cells;
 };
 
-const getWeekdayRows = (classes: ClassData[]) => {
+const getWeekdayRows = (
+    classes: ClassData[],
+    overallClick: (classData: ClassData) => void
+): JSX.Element[][] => {
     //this seems to be complicated, however its main purpose is to
     //convert classes into respective weekdays bunches
     const classesByDay = classes.reduce((acc, cls) => {
@@ -82,7 +89,7 @@ const getWeekdayRows = (classes: ClassData[]) => {
         classesByDay["Friday"] || [],
         classesByDay["Saturday"] || [],
         classesByDay["Sunday"] || [],
-    ].map((classes) => getFilledRow(classes));
+    ].map((classes) => getFilledRow(classes, overallClick));
 
     return result;
 };
@@ -122,6 +129,10 @@ export default function ClassesViewer({
     classes: ClassData[];
 }) {
     const styles = useStyle();
+    const [showAddClassDialog, setShowAddClassDialog] = useState(false);
+    const [clickedClassData, setClickedClassData] = useState<ClassData | null>(
+        null
+    );
 
     const [
         mondayClasses,
@@ -131,7 +142,14 @@ export default function ClassesViewer({
         fridayClasses,
         saturdayClasses,
         sundayClasses,
-    ] = useMemo(() => getWeekdayRows(classes), [classes]);
+    ] = useMemo(
+        () =>
+            getWeekdayRows(classes, (classData: ClassData) => {
+                setShowAddClassDialog(true);
+                setClickedClassData(classData);
+            }),
+        [classes]
+    );
 
     return (
         <div
@@ -139,6 +157,11 @@ export default function ClassesViewer({
                 ...style,
             }}
         >
+            <AddClassDialog
+                data={clickedClassData}
+                open={showAddClassDialog}
+                onClose={() => setShowAddClassDialog(false)}
+            />
             <Table
                 style={{
                     width: "400vw",

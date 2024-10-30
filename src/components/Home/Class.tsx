@@ -19,7 +19,7 @@ export default function Class({
 }) {
     return (
         <Card
-            onClick={onClick}
+            onClick={() => {}}
             style={{
                 margin: "20px",
                 height: "105px",
@@ -31,6 +31,7 @@ export default function Class({
                         appearance="transparent"
                         icon={<MoreHorizontal20Regular />}
                         aria-label="More options"
+                        onClick={onClick}
                     />
                 }
                 header={<Title3>{data.title}</Title3>}
