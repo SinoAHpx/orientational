@@ -11,7 +11,7 @@ import {
     Title2,
 } from "@fluentui/react-components";
 import { DatePicker } from "@fluentui/react-datepicker-compat";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 export default function SettingsDialog({
     open,
