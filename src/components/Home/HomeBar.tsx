@@ -2,6 +2,7 @@ import {
     Badge,
     Button,
     Card,
+    DialogTrigger,
     Input,
 } from "@fluentui/react-components";
 import { AddRegular, SearchRegular } from "@fluentui/react-icons";
@@ -19,6 +20,8 @@ export default function HomeBar({ style }: HomeBarProps) {
     const [showSettingsDialog, setShowSettingsialog] = useState(false);
     const handleAddClick = () => {
         setShowAddDialog(true);
+        console.log(showAddDialog);
+        
     };
 
     const handleSettingClick = () => {
@@ -47,33 +50,29 @@ export default function HomeBar({ style }: HomeBarProps) {
                         })}
                         {/*todo: the week is actually mocking*/}, Week 7
                     </Badge>
-
-                    <AddClassDialog
-                        trigger={
-                            <Button
-                                icon={<AddRegular />}
-                                appearance="primary"
-                                onClick={handleAddClick}
-                            >
-                                Add
-                            </Button>
-                        }
-                        open={showAddDialog}
-                        onClose={() => {}}
-                    />
+                    <DialogTrigger>
+                        <Button
+                            icon={<AddRegular />}
+                            appearance="primary"
+                            onClick={handleAddClick}
+                        >
+                            Add
+                        </Button>
+                    </DialogTrigger>
+                    <AddClassDialog open={showAddDialog} onClose={() => {
+                        setShowAddDialog(false)
+                    }} />
                 </Flex>
 
                 <Flex gap="15px">
                     <Button>Export</Button>
                     <Button>Import</Button>
-                    <SettingsDialog
-                        trigger={
-                            <Button onClick={handleSettingClick}>
-                                Settings
-                            </Button>
-                        }
-                        open={showSettingsDialog}
-                    ></SettingsDialog>
+                    <DialogTrigger>
+                        <Button onClick={handleSettingClick}>Settings</Button>
+                    </DialogTrigger>
+                    <SettingsDialog open={showSettingsDialog} onClose={() => {
+                        setShowSettingsialog(false)
+                    }}></SettingsDialog>
                 </Flex>
 
                 <Flex gap="15px">

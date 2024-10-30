@@ -11,25 +11,28 @@ import {
     Title2,
 } from "@fluentui/react-components";
 import { DatePicker } from "@fluentui/react-datepicker-compat";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function SettingsDialog({
-    trigger,
     open,
+    onClose,
 }: {
-    trigger: JSX.Element;
     open: boolean;
+    onClose?: (firstWeek: Date | null) => void;
 }) {
-    const [isOpen, setIsOpen] = useState(open);
+    const firstWeekRef = useRef<HTMLInputElement>(null);
 
     return (
         <Dialog
-            open={isOpen}
+            open={open}
             onOpenChange={(_event, data) => {
-                setIsOpen(data.open);
+                if (onClose) {
+                    onClose(
+                        data.open ? new Date(firstWeekRef.current?.value ?? '') : null
+                    );
+                }
             }}
         >
-            <DialogTrigger>{trigger}</DialogTrigger>
             <DialogSurface>
                 <DialogBody>
                     <DialogTitle>
@@ -37,7 +40,7 @@ export default function SettingsDialog({
                     </DialogTitle>
                     <DialogContent>
                         <Field label="First week at">
-                            <DatePicker />
+                            <DatePicker ref={firstWeekRef} />
                         </Field>
                     </DialogContent>
                     <DialogActions>
