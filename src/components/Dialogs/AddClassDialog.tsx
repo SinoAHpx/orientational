@@ -26,9 +26,11 @@ import { TimePicker } from "@fluentui/react-timepicker-compat";
 export default function AddClassDialog({
     trigger,
     open,
+    data = null,
     onClose = null,
 }: {
     trigger: JSX.Element;
+    data?: ClassData | null;
     open: boolean;
     onClose?: ((data: ClassData) => void) | null;
 }) {
@@ -85,6 +87,17 @@ export default function AddClassDialog({
                                     />
                                 </Field>
                             </Flex>
+                            <Field label="Weekday" required>
+                                <Combobox>
+                                    <Option>Monday</Option>
+                                    <Option>Tuesday</Option>
+                                    <Option>Wednesday</Option>
+                                    <Option>Thursday</Option>
+                                    <Option>Friday</Option>
+                                    <Option>Saturday</Option>
+                                    <Option>Sunday</Option>
+                                </Combobox>
+                            </Field>
                             <Field
                                 label={
                                     <InfoLabel info="How many weeks will this class persist.">
@@ -95,7 +108,10 @@ export default function AddClassDialog({
                                 <Input type="number" />
                             </Field>
                             <Field label="Class frequency">
-                                <Combobox freeform={false} defaultValue='Every week'>
+                                <Combobox
+                                    freeform={false}
+                                    defaultValue="Every week"
+                                >
                                     <Option>Every week</Option>
                                     <Option>Every 2 weeks</Option>
                                     <Option>Every 3 weeks</Option>

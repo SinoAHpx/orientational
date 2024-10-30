@@ -5,4 +5,6 @@ export interface ClassData {
     endTime: string;
     room: string;
     weekday: string;
+    weekDuration: number;
+    classFrequency: string;
 }
