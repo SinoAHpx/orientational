@@ -6,7 +6,7 @@ import {
     Input,
 } from "@fluentui/react-components";
 import { AddRegular, SearchRegular } from "@fluentui/react-icons";
-import Flex from "../../Universal/Flex";
+import Flex from "../Universal/Flex";
 import AddClassDialog from "../Dialogs/AddClassDialog";
 import { useState } from "react";
 import SettingsDialog from "../Settings/SettingsDialog";
@@ -57,9 +57,12 @@ export default function HomeBar({ style }: HomeBarProps) {
                             Add
                         </Button>
                     </DialogTrigger>
-                    <AddClassDialog open={showAddDialog} onClose={() => {
-                        setShowAddDialog(false)
-                    }} />
+                    <AddClassDialog
+                        open={showAddDialog}
+                        onClose={() => {
+                            setShowAddDialog(false);
+                        }}
+                    />
                 </Flex>
 
                 <Flex gap="15px">
@@ -68,9 +71,12 @@ export default function HomeBar({ style }: HomeBarProps) {
                     <DialogTrigger>
                         <Button onClick={handleSettingClick}>Settings</Button>
                     </DialogTrigger>
-                    <SettingsDialog open={showSettingsDialog} onClose={() => {
-                        setShowSettingsialog(false)
-                    }}></SettingsDialog>
+                    <SettingsDialog
+                        open={showSettingsDialog}
+                        onClose={() => {
+                            setShowSettingsialog(false);
+                        }}
+                    ></SettingsDialog>
                 </Flex>
 
                 <Flex gap="15px">

@@ -14,7 +14,7 @@ import {
 import { DatePicker } from "@fluentui/react-datepicker-compat";
 import { useRef } from "react";
 import { Settings } from "../../models/settings.model";
-import Flex from "../../Universal/Flex";
+import Flex from "../Universal/Flex";
 
 export default function SettingsDialog({
     open,

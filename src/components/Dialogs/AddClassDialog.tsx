@@ -16,7 +16,7 @@ import {
 } from "@fluentui/react-components";
 import { ClassData, defaultClassData } from "../../models/class-data.model";
 import { useState } from "react";
-import Flex from "../../Universal/Flex";
+import Flex from "../Universal/Flex";
 import { TimePicker } from "@fluentui/react-timepicker-compat";
 
 export default function AddClassDialog({

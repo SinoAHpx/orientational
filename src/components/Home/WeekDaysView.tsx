@@ -1,4 +1,4 @@
-import Flex from "../../Universal/Flex";
+import Flex from "../Universal/Flex";
 import { Title2 } from "@fluentui/react-components";
 
 export default function WeekDaysView() {
