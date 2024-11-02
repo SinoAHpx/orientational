@@ -11,15 +11,8 @@ import Class from "./Class";
 import { ClassData, defaultClassData } from "../../models/class-data.model";
 import AddClassDialog from "../Dialogs/AddClassDialog";
 import EditClassDialog from "../Dialogs/EditClassdialog";
-
-const timeSequence = (() => {
-    const times = [];
-    for (let hour = 7; hour < 23; hour++) {
-        times.push(`${hour}:00`);
-        times.push(`${hour}:30`);
-    }
-    return times;
-})();
+import { getRoundedTime } from "../utils/time";
+import { timeSequence } from "../utils/time";
 
 const getClassOccupiedSpaces = (cls: ClassData) => {
     const start = cls.startTime.split(":");
@@ -30,12 +23,6 @@ const getClassOccupiedSpaces = (cls: ClassData) => {
 
     const spaces = Math.floor(gapSeconds / 1800);
     return spaces + 1;
-};
-
-const getRoundedTime = (time: string) => {
-    const [hours, minutes] = time.split(":").map((s) => parseInt(s));
-    const roundedMinutes = minutes >= 30 ? "30" : "00";
-    return `${hours}:${roundedMinutes}`;
 };
 
 const getFilledRow = (

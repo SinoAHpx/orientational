@@ -18,14 +18,7 @@ import { ClassData, defaultClassData } from "../../models/class-data.model";
 import { useEffect, useState } from "react";
 import Flex from "../Universal/Flex";
 import { TimePicker } from "@fluentui/react-timepicker-compat";
-
-const timeLocalizer = (date: Date) => {
-    return date.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-    });
-};
+import { timeLocalizer } from "../utils/time";
 
 export default function EditClassDialog({
     open,

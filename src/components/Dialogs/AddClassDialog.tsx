@@ -18,6 +18,7 @@ import { ClassData, defaultClassData } from "../../models/class-data.model";
 import { useState } from "react";
 import Flex from "../Universal/Flex";
 import { TimePicker } from "@fluentui/react-timepicker-compat";
+import { timeLocalizer } from "../utils/time";
 
 export default function AddClassDialog({
     open,
@@ -52,7 +53,6 @@ export default function AddClassDialog({
             classFrequency: formData.get('classFrequency') as string,
             teacher: formData.get('teacher') as string,
         };
-        console.log(newClassData);
         e.preventDefault();
         
         if (onClose) {
@@ -88,6 +88,7 @@ export default function AddClassDialog({
                                             increment={5}
                                             startHour={7}
                                             endHour={23}
+                                            formatDateToTimeString={timeLocalizer}
                                         />
                                     </Field>
                                     <Field
@@ -101,6 +102,7 @@ export default function AddClassDialog({
                                             increment={5}
                                             startHour={7}
                                             endHour={23}
+                                            formatDateToTimeString={timeLocalizer}
                                         />
                                     </Field>
                                 </Flex>
