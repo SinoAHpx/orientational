@@ -9,7 +9,8 @@ export default function Home() {
     const [classes, setClasses] = useState<ClassData[]>([]);
     useEffect(() => {
         setClasses(database.data.classes);
-    }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [database.data.classes]);
 
     return (
         <>

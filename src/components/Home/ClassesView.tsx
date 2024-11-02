@@ -13,6 +13,7 @@ import AddClassDialog from "../Dialogs/AddClassDialog";
 import EditClassDialog from "../Dialogs/EditClassdialog";
 import { getRoundedTime } from "../utils/time";
 import { timeSequence } from "../utils/time";
+import { database } from "../utils/database";
 
 const getClassOccupiedSpaces = (cls: ClassData) => {
     const start = cls.startTime.split(":");
@@ -139,6 +140,22 @@ export default function ClassesViewer({
         setShowEditClassDialog(true);
     });
 
+    const handleAdd = async (data: ClassData | null) => {
+        console.log("Before database update:", database.data.classes);
+        
+        if (data === null) {
+            return;
+        }
+    
+        database.data.classes.push({
+            ...data,
+            teacher: data.teacher || ""
+        });
+        await database.write();
+    
+        console.log("After database update:", database.data.classes);
+    }
+
     return (
         <div
             style={{
@@ -147,7 +164,11 @@ export default function ClassesViewer({
         >
             <AddClassDialog
                 open={showAddClassDialog}
-                onClose={() => setShowAddClassDialog(false)}
+                onClose={async (data) => {
+                    await handleAdd(data)
+                    console.log('shitaiwdhiawhdawd');
+                    setShowAddClassDialog(false);
+                }}
             />
             <EditClassDialog
                 data={clickedClassData}

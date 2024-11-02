@@ -14,22 +14,19 @@ import {
     Option,
     Title2,
 } from "@fluentui/react-components";
-import { ClassData, defaultClassData } from "../../models/class-data.model";
-import { useState } from "react";
+import { ClassData } from "../../models/class-data.model";
 import Flex from "../Universal/Flex";
 import { TimePicker } from "@fluentui/react-timepicker-compat";
 import { timeLocalizer } from "../utils/time";
 
 export default function AddClassDialog({
     open,
-    onClose = null,
+    onClose,
 }: {
     data?: ClassData | null;
     open: boolean;
-    onClose?: ((data: ClassData | null) => void) | null;
+    onClose: (data: ClassData | null) => void;
 }) {
-    const [classData, _setClassData] = useState(defaultClassData);
-
     const handleClose = () => {
         if (onClose) {
             onClose(null);
@@ -37,27 +34,21 @@ export default function AddClassDialog({
     };
 
     const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
-        if (onClose) {
-            onClose(classData);
-        }
-        
         const formData = new FormData(e.currentTarget);
-        
+
         const newClassData: ClassData = {
-            title: formData.get('title') as string,
-            room: formData.get('room') as string,
-            startTime: formData.get('startTime') as string,
-            endTime: formData.get('endTime') as string,
-            weekday: formData.get('weekday') as string,
-            weekDuration: parseInt(formData.get('weekDuration') as string),
-            classFrequency: formData.get('classFrequency') as string,
-            teacher: formData.get('teacher') as string,
+            title: formData.get("title") as string,
+            room: formData.get("room") as string,
+            startTime: formData.get("startTime") as string,
+            endTime: formData.get("endTime") as string,
+            weekday: formData.get("weekday") as string,
+            weekDuration: parseInt(formData.get("weekDuration") as string),
+            classFrequency: formData.get("classFrequency") as string,
+            teacher: formData.get("teacher") as string,
         };
         e.preventDefault();
-        
-        if (onClose) {
-            onClose(newClassData);
-        }
+
+        onClose(newClassData);
     };
 
     return (
@@ -88,7 +79,9 @@ export default function AddClassDialog({
                                             increment={5}
                                             startHour={7}
                                             endHour={23}
-                                            formatDateToTimeString={timeLocalizer}
+                                            formatDateToTimeString={
+                                                timeLocalizer
+                                            }
                                         />
                                     </Field>
                                     <Field
@@ -102,7 +95,9 @@ export default function AddClassDialog({
                                             increment={5}
                                             startHour={7}
                                             endHour={23}
-                                            formatDateToTimeString={timeLocalizer}
+                                            formatDateToTimeString={
+                                                timeLocalizer
+                                            }
                                         />
                                     </Field>
                                 </Flex>
@@ -124,10 +119,18 @@ export default function AddClassDialog({
                                         </InfoLabel>
                                     }
                                 >
-                                    <Input type="number" name="weekDuration" id="weekDuration" />
+                                    <Input
+                                        type="number"
+                                        name="weekDuration"
+                                        id="weekDuration"
+                                    />
                                 </Field>
                                 <Field label="Class frequency">
-                                    <Combobox name="classFrequency" freeform={false} id="classFrequency">
+                                    <Combobox
+                                        name="classFrequency"
+                                        freeform={false}
+                                        id="classFrequency"
+                                    >
                                         <Option>Every week</Option>
                                         <Option>Every 2 weeks</Option>
                                         <Option>Every 3 weeks</Option>
@@ -147,7 +150,7 @@ export default function AddClassDialog({
                                 action="close"
                                 disableButtonEnhancement
                             >
-                                <Button appearance="secondary">Close</Button>
+                                <Button appearance="secondary" >Close</Button>
                             </DialogTrigger>
                             <Button appearance="primary" type="submit">
                                 Add
