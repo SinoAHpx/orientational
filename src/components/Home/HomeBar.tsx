@@ -20,8 +20,6 @@ export default function HomeBar({ style }: HomeBarProps) {
     const [showSettingsDialog, setShowSettingsialog] = useState(false);
     const handleAddClick = () => {
         setShowAddDialog(true);
-        console.log(showAddDialog);
-        
     };
 
     const handleSettingClick = () => {

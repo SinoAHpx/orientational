@@ -19,15 +19,42 @@ import { useEffect, useRef, useState } from "react";
 import Flex from "../../Universal/Flex";
 import { TimePicker } from "@fluentui/react-timepicker-compat";
 
-export default function AddClassDialog({
+export default function EditClassDialog({
     open,
+    data,
     onClose = null,
 }: {
     data?: ClassData | null;
     open: boolean;
     onClose?: ((data: ClassData | null) => void) | null;
 }) {
-    const [classData, setClassData] = useState(defaultClassData);
+    const [classData, setClassData] = useState(data);
+
+    const titleRef = useRef<HTMLInputElement>(null);
+    const roomRef = useRef<HTMLInputElement>(null);
+    const startTimeRef = useRef<HTMLInputElement>(null);
+    const endTimeRef = useRef<HTMLInputElement>(null);
+    const weekdayRef = useRef<HTMLInputElement>(null);
+    const weekDurationRef = useRef<HTMLInputElement>(null);
+    const classFrequencyRef = useRef<HTMLInputElement>(null);
+    const teacherRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        console.log(1);
+        if (data && titleRef.current && roomRef.current && startTimeRef.current && 
+            endTimeRef.current && weekdayRef.current && weekDurationRef.current && 
+            classFrequencyRef.current && teacherRef.current) {
+                    
+            titleRef.current.value = data.title;
+            roomRef.current.value = data.room;
+            startTimeRef.current.value = data.startTime;
+            endTimeRef.current.value = data.endTime;
+            weekdayRef.current.value = data.weekday;
+            weekDurationRef.current.value = data.weekDuration.toString();
+            classFrequencyRef.current.value = data.classFrequency;
+            teacherRef.current.value = data.teacher ?? "";
+        }
+    }, []);
 
     const handleClose = () => {
         if (onClose) {
@@ -41,6 +68,9 @@ export default function AddClassDialog({
         }
     };
 
+    console.log(2);
+    
+
     return (
         <Dialog open={open} onOpenChange={handleClose}>
             <DialogSurface>
@@ -51,10 +81,10 @@ export default function AddClassDialog({
                     <DialogContent>
                         <Flex direction="column" gap="5px">
                             <Field label="Class title" required>
-                                <Input />
+                                <Input ref={titleRef} />
                             </Field>
                             <Field label="Room / Building" required>
-                                <Input />
+                                <Input ref={roomRef} />
                             </Field>
                             <Flex gap="15px">
                                 <Field
@@ -63,6 +93,7 @@ export default function AddClassDialog({
                                     required
                                 >
                                     <TimePicker
+                                        ref={startTimeRef}
                                         increment={5}
                                         startHour={7}
                                         endHour={23}
@@ -74,6 +105,7 @@ export default function AddClassDialog({
                                     required
                                 >
                                     <TimePicker
+                                        ref={endTimeRef}
                                         increment={5}
                                         startHour={7}
                                         endHour={23}
@@ -81,7 +113,7 @@ export default function AddClassDialog({
                                 </Field>
                             </Flex>
                             <Field label="Weekday" required>
-                                <Combobox>
+                                <Combobox ref={weekdayRef}>
                                     <Option>Monday</Option>
                                     <Option>Tuesday</Option>
                                     <Option>Wednesday</Option>
@@ -98,17 +130,23 @@ export default function AddClassDialog({
                                     </InfoLabel>
                                 }
                             >
-                                <Input type="number" />
+                                <Input ref={weekDurationRef} type="number" />
                             </Field>
                             <Field label="Class frequency">
-                                <Combobox freeform={false}>
+                                <Combobox
+                                    ref={classFrequencyRef}
+                                    freeform={false}
+                                >
                                     <Option>Every week</Option>
                                     <Option>Every 2 weeks</Option>
                                     <Option>Every 3 weeks</Option>
                                 </Combobox>
                             </Field>
                             <Field label="Teacher">
-                                <Input placeholder="Teacher name" />
+                                <Input
+                                    ref={teacherRef}
+                                    placeholder="Teacher name"
+                                />
                             </Field>
                         </Flex>
                     </DialogContent>
@@ -116,6 +154,16 @@ export default function AddClassDialog({
                         <DialogTrigger action="close" disableButtonEnhancement>
                             <Button appearance="secondary">Close</Button>
                         </DialogTrigger>
+                        <Button
+                                appearance="secondary"
+                                style={{
+                                    backgroundColor: "#da3b01",
+                                    color: "white",
+                                }}
+                                onClick={() => onClose && onClose(null)}
+                            >
+                                Delete
+                            </Button>
                         <Button appearance="primary" onClick={handleSave}>
                             Add
                         </Button>

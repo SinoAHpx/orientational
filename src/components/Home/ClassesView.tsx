@@ -10,6 +10,7 @@ import { useMemo, useState } from "react";
 import Class from "./Class";
 import { ClassData, defaultClassData } from "../../models/class-data.model";
 import AddClassDialog from "../Dialogs/AddClassDialog";
+import EditClassDialog from "../Dialogs/EditClassdialog";
 
 const timeSequence = (() => {
     const times = [];
@@ -130,6 +131,7 @@ export default function ClassesViewer({
 }) {
     const styles = useStyle();
     const [showAddClassDialog, setShowAddClassDialog] = useState(false);
+    const [showEditClassDialog, setShowEditClassDialog] = useState(false);
     const [clickedClassData, setClickedClassData] =
         useState<ClassData>(defaultClassData);
 
@@ -145,7 +147,7 @@ export default function ClassesViewer({
         () =>
             getWeekdayRows(classes, (classData: ClassData) => {
                 setClickedClassData(classData);
-                setShowAddClassDialog(true);
+                setShowEditClassDialog(true);
             }),
         [classes]
     );
@@ -160,6 +162,11 @@ export default function ClassesViewer({
                 data={clickedClassData}
                 open={showAddClassDialog}
                 onClose={() => setShowAddClassDialog(false)}
+            />
+            <EditClassDialog
+                data={clickedClassData}
+                open={showEditClassDialog}
+                onClose={() => setShowEditClassDialog(false)}
             />
             <Table
                 style={{
