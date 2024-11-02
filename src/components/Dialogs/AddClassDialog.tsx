@@ -35,92 +35,124 @@ export default function AddClassDialog({
         }
     };
 
-    const handleSave = () => {
+    const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
         if (onClose) {
             onClose(classData);
+        }
+        
+        const formData = new FormData(e.currentTarget);
+        
+        const newClassData: ClassData = {
+            title: formData.get('title') as string,
+            room: formData.get('room') as string,
+            startTime: formData.get('startTime') as string,
+            endTime: formData.get('endTime') as string,
+            weekday: formData.get('weekday') as string,
+            weekDuration: parseInt(formData.get('weekDuration') as string),
+            classFrequency: formData.get('classFrequency') as string,
+            teacher: formData.get('teacher') as string,
+        };
+        console.log(newClassData);
+        e.preventDefault();
+        
+        if (onClose) {
+            onClose(newClassData);
         }
     };
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
             <DialogSurface>
-                <DialogBody>
-                    <DialogTitle>
-                        <Title2>Add a class</Title2>
-                    </DialogTitle>
-                    <DialogContent>
-                        <Flex direction="column" gap="5px">
-                            <Field label="Class title" required>
-                                <Input />
-                            </Field>
-                            <Field label="Room / Building" required>
-                                <Input />
-                            </Field>
-                            <Flex gap="15px">
-                                <Field
-                                    style={{ width: "50%", margin: "auto" }}
-                                    label="Start time"
-                                    required
-                                >
-                                    <TimePicker
-                                        increment={5}
-                                        startHour={7}
-                                        endHour={23}
-                                    />
+                <form onSubmit={handleSave}>
+                    <DialogBody>
+                        <DialogTitle>
+                            <Title2>Add a class</Title2>
+                        </DialogTitle>
+                        <DialogContent>
+                            <Flex direction="column" gap="5px">
+                                <Field label="Class title" required>
+                                    <Input name="title" id="title" />
+                                </Field>
+                                <Field label="Room / Building" required>
+                                    <Input name="room" id="room" />
+                                </Field>
+                                <Flex gap="15px">
+                                    <Field
+                                        style={{ width: "50%", margin: "auto" }}
+                                        label="Start time"
+                                        required
+                                    >
+                                        <TimePicker
+                                            name="startTime"
+                                            id="startTime"
+                                            increment={5}
+                                            startHour={7}
+                                            endHour={23}
+                                        />
+                                    </Field>
+                                    <Field
+                                        style={{ width: "50%", margin: "auto" }}
+                                        label="End time"
+                                        required
+                                    >
+                                        <TimePicker
+                                            name="endTime"
+                                            id="endTime"
+                                            increment={5}
+                                            startHour={7}
+                                            endHour={23}
+                                        />
+                                    </Field>
+                                </Flex>
+                                <Field label="Weekday" required>
+                                    <Combobox name="weekday" id="weekday">
+                                        <Option>Monday</Option>
+                                        <Option>Tuesday</Option>
+                                        <Option>Wednesday</Option>
+                                        <Option>Thursday</Option>
+                                        <Option>Friday</Option>
+                                        <Option>Saturday</Option>
+                                        <Option>Sunday</Option>
+                                    </Combobox>
                                 </Field>
                                 <Field
-                                    style={{ width: "50%", margin: "auto" }}
-                                    label="End time"
-                                    required
+                                    label={
+                                        <InfoLabel info="How many weeks will this class persist.">
+                                            Week duration
+                                        </InfoLabel>
+                                    }
                                 >
-                                    <TimePicker
-                                        increment={5}
-                                        startHour={7}
-                                        endHour={23}
+                                    <Input type="number" name="weekDuration" id="weekDuration" />
+                                </Field>
+                                <Field label="Class frequency">
+                                    <Combobox name="classFrequency" freeform={false} id="classFrequency">
+                                        <Option>Every week</Option>
+                                        <Option>Every 2 weeks</Option>
+                                        <Option>Every 3 weeks</Option>
+                                    </Combobox>
+                                </Field>
+                                <Field label="Teacher">
+                                    <Input
+                                        name="teacher"
+                                        placeholder="Teacher name"
+                                        id="teacher"
                                     />
                                 </Field>
                             </Flex>
-                            <Field label="Weekday" required>
-                                <Combobox>
-                                    <Option>Monday</Option>
-                                    <Option>Tuesday</Option>
-                                    <Option>Wednesday</Option>
-                                    <Option>Thursday</Option>
-                                    <Option>Friday</Option>
-                                    <Option>Saturday</Option>
-                                    <Option>Sunday</Option>
-                                </Combobox>
-                            </Field>
-                            <Field
-                                label={
-                                    <InfoLabel info="How many weeks will this class persist.">
-                                        Week duration
-                                    </InfoLabel>
-                                }
+                        </DialogContent>
+                        <DialogActions>
+                            <DialogTrigger
+                                action="close"
+                                disableButtonEnhancement
                             >
-                                <Input type="number" />
-                            </Field>
-                            <Field label="Class frequency">
-                                <Combobox freeform={false}>
-                                    <Option>Every week</Option>
-                                    <Option>Every 2 weeks</Option>
-                                    <Option>Every 3 weeks</Option>
-                                </Combobox>
-                            </Field>
-                            <Field label="Teacher">
-                                <Input placeholder="Teacher name" />
-                            </Field>
-                        </Flex>
-                    </DialogContent>
-                    <DialogActions>
-                        <DialogTrigger action="close" disableButtonEnhancement>
-                            <Button appearance="secondary">Close</Button>
-                        </DialogTrigger>
-                        <Button appearance="primary" onClick={handleSave}>
-                            Add
-                        </Button>
-                    </DialogActions>
-                </DialogBody>
+                                <Button appearance="secondary">Close</Button>
+                            </DialogTrigger>
+                            <Button appearance="primary" type="submit">
+                                Add
+                            </Button>
+                        </DialogActions>
+                    </DialogBody>
+                </form>
             </DialogSurface>
         </Dialog>
     );

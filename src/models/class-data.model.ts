@@ -16,6 +16,6 @@ export const defaultClassData: ClassData = {
     endTime: "8:00", 
     room: "",
     weekday: "",
-    weekDuration: 1,
-    classFrequency: "weekly"
+    weekDuration: 16,
+    classFrequency: "Every week",
 };

@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import ClassesViewer from "./ClassesView";
 import HomeBar from "./HomeBar";
 import WeekDaysView from "./WeekDaysView";
+import { database } from "../utils/database";
+import { ClassData } from "../../models/class-data.model";
 
 export default function Home() {
-    const [classes, setClasses] = useState([]);
+    const [classes, setClasses] = useState<ClassData[]>([]);
     useEffect(() => {
-        //this is just mocking data, wait to fetch from real API
-        fetch("./mocking.json")
-            .then((response) => response.json())
-            .then((json) => setClasses(json));
+        setClasses(database.data.classes);
     }, []);
 
     return (

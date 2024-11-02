@@ -63,7 +63,11 @@ const getFilledRow = (
         }
         cells.push(
             <TableCell colSpan={classSpaces}>
-                <Class onClick={() => overallClick(cls)} data={cls} />
+                <Class
+                    key={cls.title + cls.startTime}
+                    onClick={() => overallClick(cls)}
+                    data={cls}
+                />
             </TableCell>
         );
     }
@@ -146,7 +150,7 @@ export default function ClassesViewer({
     ] = getWeekdayRows(classes, (classData: ClassData) => {
         setClickedClassData(classData);
         setShowEditClassDialog(true);
-    })
+    });
 
     return (
         <div
@@ -174,7 +178,7 @@ export default function ClassesViewer({
                 <TableHeader>
                     <TableRow>
                         {timeSequence.map((time) => (
-                            <TableCell key={time}>{time}</TableCell>
+                            <TableCell key={`time-${time}`}>{time}</TableCell>
                         ))}
                     </TableRow>
                 </TableHeader>
