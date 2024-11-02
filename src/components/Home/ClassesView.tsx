@@ -143,14 +143,10 @@ export default function ClassesViewer({
         fridayClasses,
         saturdayClasses,
         sundayClasses,
-    ] = useMemo(
-        () =>
-            getWeekdayRows(classes, (classData: ClassData) => {
-                setClickedClassData(classData);
-                setShowEditClassDialog(true);
-            }),
-        [classes]
-    );
+    ] = getWeekdayRows(classes, (classData: ClassData) => {
+        setClickedClassData(classData);
+        setShowEditClassDialog(true);
+    })
 
     return (
         <div
@@ -159,7 +155,6 @@ export default function ClassesViewer({
             }}
         >
             <AddClassDialog
-                data={clickedClassData}
                 open={showAddClassDialog}
                 onClose={() => setShowAddClassDialog(false)}
             />
