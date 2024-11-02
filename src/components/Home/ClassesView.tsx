@@ -6,7 +6,7 @@ import {
     TableRow,
     makeStyles,
 } from "@fluentui/react-components";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Class from "./Class";
 import { ClassData, defaultClassData } from "../../models/class-data.model";
 import AddClassDialog from "../Dialogs/AddClassDialog";

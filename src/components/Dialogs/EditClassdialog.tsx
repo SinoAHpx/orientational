@@ -15,7 +15,7 @@ import {
     Title2,
 } from "@fluentui/react-components";
 import { ClassData, defaultClassData } from "../../models/class-data.model";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Flex from "../../Universal/Flex";
 import { TimePicker } from "@fluentui/react-timepicker-compat";
 
