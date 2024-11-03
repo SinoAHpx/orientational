@@ -9,11 +9,9 @@ import {
 import { useState } from "react";
 import Class from "./Class";
 import { ClassData, defaultClassData } from "../../models/class-data.model";
-import AddClassDialog from "../Dialogs/AddClassDialog";
 import EditClassDialog from "../Dialogs/EditClassdialog";
 import { getRoundedTime } from "../utils/time";
 import { timeSequence } from "../utils/time";
-import { database } from "../utils/database";
 
 const getClassOccupiedSpaces = (cls: ClassData) => {
     const start = cls.startTime.split(":");
@@ -122,7 +120,6 @@ export default function ClassesViewer({
     classes: ClassData[];
 }) {
     const styles = useStyle();
-    const [showAddClassDialog, setShowAddClassDialog] = useState(false);
     const [showEditClassDialog, setShowEditClassDialog] = useState(false);
     const [clickedClassData, setClickedClassData] =
         useState<ClassData>(defaultClassData);
@@ -140,21 +137,7 @@ export default function ClassesViewer({
         setShowEditClassDialog(true);
     });
 
-    const handleAdd = async (data: ClassData | null) => {
-        console.log("Before database update:", database.data.classes);
-        
-        if (data === null) {
-            return;
-        }
-    
-        database.data.classes.push({
-            ...data,
-            teacher: data.teacher || ""
-        });
-        await database.write();
-    
-        console.log("After database update:", database.data.classes);
-    }
+
 
     return (
         <div
@@ -162,14 +145,6 @@ export default function ClassesViewer({
                 ...style,
             }}
         >
-            <AddClassDialog
-                open={showAddClassDialog}
-                onClose={async (data) => {
-                    await handleAdd(data)
-                    console.log('shitaiwdhiawhdawd');
-                    setShowAddClassDialog(false);
-                }}
-            />
             <EditClassDialog
                 data={clickedClassData}
                 open={showEditClassDialog}

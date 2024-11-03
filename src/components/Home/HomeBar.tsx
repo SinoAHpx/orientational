@@ -10,6 +10,8 @@ import Flex from "../Universal/Flex";
 import AddClassDialog from "../Dialogs/AddClassDialog";
 import { useState } from "react";
 import SettingsDialog from "../Settings/SettingsDialog";
+import { ClassData } from "../../models/class-data.model";
+import { database } from "../utils/database";
 
 interface HomeBarProps {
     style?: React.CSSProperties;
@@ -25,6 +27,25 @@ export default function HomeBar({ style }: HomeBarProps) {
     const handleSettingClick = () => {
         setShowSettingsialog(true);
     };
+
+    const handleAdd = async (data: ClassData | null) => {
+        console.log("Before database update:", database.data.classes);
+        
+        if (data === null) {
+            setShowAddDialog(false);
+            return;
+        }
+    
+        database.data.classes.push({
+            ...data,
+            teacher: data.teacher || ""
+        });
+        await database.write();
+    
+        console.log("After database update:", database.data.classes);
+
+        setShowAddDialog(false);
+    }
 
     return (
         <>
@@ -59,9 +80,7 @@ export default function HomeBar({ style }: HomeBarProps) {
                     </DialogTrigger>
                     <AddClassDialog
                         open={showAddDialog}
-                        onClose={() => {
-                            setShowAddDialog(false);
-                        }}
+                        onClose={handleAdd}
                     />
                 </Flex>
 
