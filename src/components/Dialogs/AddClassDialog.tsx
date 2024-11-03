@@ -13,6 +13,12 @@ import {
     Input,
     Option,
     Title2,
+    Toast,
+    ToastBody,
+    Toaster,
+    ToastTitle,
+    useId,
+    useToastController,
 } from "@fluentui/react-components";
 import { ClassData } from "../../models/class-data.model";
 import Flex from "../Universal/Flex";
@@ -37,22 +43,54 @@ export default function AddClassDialog({
     const classFrequencyRef = useRef<HTMLInputElement>(null);
     const teacherRef = useRef<HTMLInputElement>(null);
 
+    const toasterId = useId("alert");
+    const { dispatchToast } = useToastController(toasterId);
+    const notify = () =>
+        dispatchToast(
+            <Toast>
+                <ToastTitle>Alert</ToastTitle>
+                <ToastBody>Please fill the required fields.</ToastBody>
+            </Toast>,
+            { intent: "error" }
+        );
+
     const handleClose = () => {
         onClose(null);
     };
 
     const handleSave = () => {
-        if (titleRef.current && roomRef.current && startTimeRef.current && endTimeRef.current && weekdayRef.current && weekDurationRef.current && classFrequencyRef.current && teacherRef.current) {
+        if (
+            titleRef.current &&
+            roomRef.current &&
+            startTimeRef.current &&
+            endTimeRef.current &&
+            weekdayRef.current &&
+            weekDurationRef.current &&
+            classFrequencyRef.current &&
+            teacherRef.current
+        ) {
             const newClassData: ClassData = {
                 title: titleRef.current.value,
                 room: roomRef.current.value,
                 startTime: startTimeRef.current.value,
                 endTime: endTimeRef.current.value,
                 weekday: weekdayRef.current.value,
-                weekDuration: parseInt(weekDurationRef.current.value),
+                weekDuration: parseInt(weekDurationRef.current.value) || 16,
                 classFrequency: classFrequencyRef.current.value,
                 teacher: teacherRef.current.value,
             };
+            //#region check required fields
+            if (
+                titleRef.current.value == "" ||
+                roomRef.current.value == "" ||
+                startTimeRef.current.value == "" ||
+                endTimeRef.current.value == "" ||
+                weekdayRef.current.value == ""
+            ) {
+                notify();
+                return;
+            }
+            //#endregion
 
             onClose(newClassData);
         }
@@ -66,6 +104,7 @@ export default function AddClassDialog({
                         <Title2>Add a class</Title2>
                     </DialogTitle>
                     <DialogContent>
+                        <Toaster toasterId={toasterId} />
                         <Flex direction="column" gap="5px">
                             <Field label="Class title" required>
                                 <Input ref={titleRef} name="title" id="title" />
@@ -106,7 +145,11 @@ export default function AddClassDialog({
                                 </Field>
                             </Flex>
                             <Field label="Weekday" required>
-                                <Combobox ref={weekdayRef} name="weekday" id="weekday">
+                                <Combobox
+                                    ref={weekdayRef}
+                                    name="weekday"
+                                    id="weekday"
+                                >
                                     <Option>Monday</Option>
                                     <Option>Tuesday</Option>
                                     <Option>Wednesday</Option>
@@ -156,10 +199,7 @@ export default function AddClassDialog({
                         <DialogTrigger action="close" disableButtonEnhancement>
                             <Button appearance="secondary">Close</Button>
                         </DialogTrigger>
-                        <Button
-                            onClick={handleSave}
-                            appearance="primary"
-                        >
+                        <Button onClick={handleSave} appearance="primary">
                             Add
                         </Button>
                     </DialogActions>
