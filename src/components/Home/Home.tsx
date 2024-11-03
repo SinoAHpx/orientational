@@ -12,8 +12,6 @@ export default function Home() {
 
     }, []);
     const handleAdd = async (data: ClassData | null) => {
-        console.log(data);
-        
         if (data == null) {
             return;
         }
@@ -24,11 +22,13 @@ export default function Home() {
             teacher: data.teacher || ""
         });
         await database.write();
-        console.log("right after write:");
-        console.log(database.data.classes);
 
-        setClasses(database.data.classes);
+        setClasses([...database.data.classes]);
+        
     }
+
+    console.log('triggered update');
+
 
     return (
         <>
