@@ -51,7 +51,6 @@ export default function EditClassDialog({
             ...prev,
             [field]: value,
         }));
-        console.log(`Updated: ${value}`);
     };
 
     return (

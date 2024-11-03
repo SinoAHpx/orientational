@@ -27,9 +27,6 @@ export default function Home() {
         
     }
 
-    console.log('triggered update');
-
-
     return (
         <>
             <HomeBar
