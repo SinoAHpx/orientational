@@ -9,8 +9,26 @@ export default function Home() {
     const [classes, setClasses] = useState<ClassData[]>([]);
     useEffect(() => {
         setClasses(database.data.classes);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [database.data.classes]);
+
+    }, []);
+    const handleAdd = async (data: ClassData | null) => {
+        console.log(data);
+        
+        if (data == null) {
+            return;
+        }
+        
+    
+        database.data.classes.push({
+            ...data,
+            teacher: data.teacher || ""
+        });
+        await database.write();
+        console.log("right after write:");
+        console.log(database.data.classes);
+
+        setClasses(database.data.classes);
+    }
 
     return (
         <>
@@ -24,6 +42,7 @@ export default function Home() {
                     height: "75px",
                     margin: "auto",
                 }}
+                onAdd={handleAdd}
             />
             <div
                 style={{
