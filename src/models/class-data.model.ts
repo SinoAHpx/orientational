@@ -7,6 +7,7 @@ export interface ClassData {
     weekday: string;
     weekDuration: number;
     classFrequency: string;
+    identifier: string
 }
 
 export const defaultClassData: ClassData = {
@@ -18,4 +19,5 @@ export const defaultClassData: ClassData = {
     weekday: "",
     weekDuration: 16,
     classFrequency: "Every week",
+    identifier: 'default'
 };

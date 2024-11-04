@@ -41,3 +41,7 @@ export const getNumeralWeekday = (weekday: string) => {
             return 0;
     }
 };
+
+export const getTimeStamp = () => {
+    return Date.now().toString();
+}

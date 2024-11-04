@@ -8,9 +8,11 @@ import { useState } from "react";
 export default function ClassesViewer({
     extraStyle,
     classes,
+    onEdit,
 }: {
     extraStyle?: React.CSSProperties;
     classes: ClassData[];
+    onEdit: (data: ClassData) => void
 }) {
     const [edit, setEdit] = useState({
         open: false,
@@ -22,11 +24,13 @@ export default function ClassesViewer({
             <EditClassDialog
                 open={edit.open}
                 data={edit.data}
-                onClose={() => {
+                onClose={(data) => {
                     setEdit({
                         ...edit,
                         open: false,
                     });
+
+                    onEdit(data)
                 }}
             />
             <div

@@ -1,29 +1,28 @@
 import { useEffect, useState } from "react";
 import ClassesViewer from "./ClassesView";
 import HomeBar from "./HomeBar";
-import { database } from "../utils/database";
+import { database, pushData, updateData } from "../utils/database";
 import { ClassData } from "../../models/class-data.model";
 
 export default function Home() {
     const [classes, setClasses] = useState<ClassData[]>([]);
     useEffect(() => {
         setClasses(database.data.classes);
-
     }, []);
+    
     const handleAdd = async (data: ClassData | null) => {
         if (data == null) {
             return;
         }
-        
-    
-        database.data.classes.push({
-            ...data,
-            teacher: data.teacher || ""
-        });
-        await database.write();
+        await pushData(data)
 
         setClasses([...database.data.classes]);
-        
+    }
+
+    const handleEdit = async (data: ClassData) => {
+        await updateData(data)
+
+        setClasses([...database.data.classes]);
     }
 
     return (
@@ -55,6 +54,7 @@ export default function Home() {
                             height: "calc(100vh - 120px)",
                         }}
                         classes={classes}
+                        onEdit={handleEdit}
                     />
                 </div>
             </div>
