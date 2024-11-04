@@ -9,7 +9,7 @@ export default function Home() {
     useEffect(() => {
         setClasses(database.data.classes);
     }, []);
-    
+
     const handleAdd = async (data: ClassData | null) => {
         if (data == null) {
             return;
@@ -19,7 +19,10 @@ export default function Home() {
         setClasses([...database.data.classes]);
     }
 
-    const handleEdit = async (data: ClassData) => {
+    const handleEdit = async (data: ClassData | null) => {
+        if (data == null) {
+            return;
+        }
         await updateData(data)
 
         setClasses([...database.data.classes]);

@@ -12,7 +12,7 @@ export default function ClassesViewer({
 }: {
     extraStyle?: React.CSSProperties;
     classes: ClassData[];
-    onEdit: (data: ClassData) => void
+    onEdit: (data: ClassData | null) => void;
 }) {
     const [edit, setEdit] = useState({
         open: false,
@@ -30,7 +30,7 @@ export default function ClassesViewer({
                         open: false,
                     });
 
-                    onEdit(data)
+                    onEdit(data);
                 }}
             />
             <div

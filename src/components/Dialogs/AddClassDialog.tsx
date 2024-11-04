@@ -30,7 +30,6 @@ export default function AddClassDialog({
     open,
     onClose,
 }: {
-    data?: ClassData | null;
     open: boolean;
     onClose: (data: ClassData | null) => void;
 }) {

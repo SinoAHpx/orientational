@@ -13,76 +13,105 @@ import {
     Input,
     Option,
     Title2,
+    Toast,
+    ToastBody,
+    Toaster,
+    ToastTitle,useId, 
+    useToastController,
 } from "@fluentui/react-components";
-import { ClassData, defaultClassData } from "../../models/class-data.model";
-import { useEffect, useState } from "react";
+import { ClassData } from "../../models/class-data.model";
+import { useRef } from "react";
 import Flex from "../Universal/Flex";
 import { TimePicker } from "@fluentui/react-timepicker-compat";
-import { timeLocalizer } from "../utils/time";
+import { getTimeStamp, timeLocalizer } from "../utils/time";
 
 export default function EditClassDialog({
     open,
+    onClose,
     data,
-    onClose = null,
 }: {
-    data: ClassData;
     open: boolean;
-    onClose?: ((data: ClassData) => void) | null;
+    onClose: (data: ClassData | null) => void;
+    data: ClassData;
 }) {
-    const [classData, setClassData] = useState(data);
-    useEffect(() => {
-        setClassData(data);
-    }, [data]);
+    const titleRef = useRef<HTMLInputElement>(null);
+    const roomRef = useRef<HTMLInputElement>(null);
+    const startTimeRef = useRef<HTMLInputElement>(null);
+    const endTimeRef = useRef<HTMLInputElement>(null);
+    const weekdayRef = useRef<HTMLInputElement>(null);
+    const weekDurationRef = useRef<HTMLInputElement>(null);
+    const classFrequencyRef = useRef<HTMLInputElement>(null);
+    const teacherRef = useRef<HTMLInputElement>(null);
+
+    const toasterId = useId("alert");
+    const { dispatchToast } = useToastController(toasterId);
+    const notify = () =>
+        dispatchToast(
+            <Toast>
+                <ToastTitle>Alert</ToastTitle>
+                <ToastBody>Please fill the required fields.</ToastBody>
+            </Toast>,
+            { intent: "error" }
+        );
 
     const handleClose = () => {
-        if (onClose) {
-            onClose(defaultClassData);
-        }
+        onClose(null);
     };
 
     const handleSave = () => {
-        if (onClose) {
-            onClose(classData);
+        if (
+            titleRef.current &&
+            roomRef.current &&
+            startTimeRef.current &&
+            endTimeRef.current &&
+            weekdayRef.current &&
+            weekDurationRef.current &&
+            classFrequencyRef.current &&
+            teacherRef.current
+        ) {
+            const newClassData: ClassData = {
+                title: titleRef.current.value,
+                room: roomRef.current.value,
+                startTime: startTimeRef.current.value,
+                endTime: endTimeRef.current.value,
+                weekday: weekdayRef.current.value,
+                weekDuration: parseInt(weekDurationRef.current.value) || 16,
+                classFrequency: classFrequencyRef.current.value,
+                teacher: teacherRef.current.value,
+                identifier: data.identifier
+            };
+            //#region check required fields
+            if (
+                titleRef.current.value == "" ||
+                roomRef.current.value == "" ||
+                startTimeRef.current.value == "" ||
+                endTimeRef.current.value == "" ||
+                weekdayRef.current.value == ""
+            ) {
+                notify();
+                return;
+            }
+            //#endregion
+
+            onClose(newClassData);
         }
     };
 
-    const handleInputChange = (field: keyof ClassData, value: any) => {
-        setClassData((prev) => ({
-            ...prev,
-            [field]: value,
-        }));
-    };
-
     return (
-        <Dialog open={open} onOpenChange={handleClose}>
+        <Dialog open={open} onOpenChange={() => handleClose()}>
             <DialogSurface>
                 <DialogBody>
                     <DialogTitle>
                         <Title2>Add a class</Title2>
                     </DialogTitle>
                     <DialogContent>
+                        <Toaster toasterId={toasterId} />
                         <Flex direction="column" gap="5px">
                             <Field label="Class title" required>
-                                <Input
-                                    value={classData.title}
-                                    onChange={(e) =>
-                                        handleInputChange(
-                                            "title",
-                                            e.target.value
-                                        )
-                                    }
-                                />
+                                <Input defaultValue={data.title} ref={titleRef} name="title" id="title" />
                             </Field>
                             <Field label="Room / Building" required>
-                                <Input
-                                    value={classData.room}
-                                    onChange={(e) =>
-                                        handleInputChange(
-                                            "room",
-                                            e.target.value
-                                        )
-                                    }
-                                />
+                                <Input defaultValue={data.room} ref={roomRef} name="room" id="room" />
                             </Field>
                             <Flex gap="15px">
                                 <Field
@@ -91,13 +120,10 @@ export default function EditClassDialog({
                                     required
                                 >
                                     <TimePicker
-                                        value={classData.startTime}
-                                        onTimeChange={(_e, d) =>
-                                            handleInputChange(
-                                                "startTime",
-                                                timeLocalizer(d.selectedTime!)
-                                            )
-                                        }
+                                        defaultValue={data.startTime}
+                                        ref={startTimeRef}
+                                        name="startTime"
+                                        id="startTime"
                                         increment={5}
                                         startHour={7}
                                         endHour={23}
@@ -110,13 +136,10 @@ export default function EditClassDialog({
                                     required
                                 >
                                     <TimePicker
-                                        value={classData.endTime}
-                                        onTimeChange={(_e, d) =>
-                                            handleInputChange(
-                                                "endTime",
-                                                timeLocalizer(d.selectedTime!)
-                                            )
-                                        }
+                                        defaultValue={data.endTime}
+                                        ref={endTimeRef}
+                                        name="endTime"
+                                        id="endTime"
                                         increment={5}
                                         startHour={7}
                                         endHour={23}
@@ -125,77 +148,19 @@ export default function EditClassDialog({
                                 </Field>
                             </Flex>
                             <Field label="Weekday" required>
-                                <Combobox value={classData.weekday}>
-                                    <Option
-                                        onClick={() =>
-                                            handleInputChange(
-                                                "weekday",
-                                                "Monday"
-                                            )
-                                        }
-                                    >
-                                        Monday
-                                    </Option>
-                                    <Option
-                                        onClick={() =>
-                                            handleInputChange(
-                                                "weekday",
-                                                "Tuesday"
-                                            )
-                                        }
-                                    >
-                                        Tuesday
-                                    </Option>
-                                    <Option
-                                        onClick={() =>
-                                            handleInputChange(
-                                                "weekday",
-                                                "Wednesday"
-                                            )
-                                        }
-                                    >
-                                        Wednesday
-                                    </Option>
-                                    <Option
-                                        onClick={() =>
-                                            handleInputChange(
-                                                "weekday",
-                                                "Thursday"
-                                            )
-                                        }
-                                    >
-                                        Thursday
-                                    </Option>
-                                    <Option
-                                        onClick={() =>
-                                            handleInputChange(
-                                                "weekday",
-                                                "Friday"
-                                            )
-                                        }
-                                    >
-                                        Friday
-                                    </Option>
-                                    <Option
-                                        onClick={() =>
-                                            handleInputChange(
-                                                "weekday",
-                                                "Saturday"
-                                            )
-                                        }
-                                    >
-                                        Saturday
-                                    </Option>
-                                    <Option
-                                        onClick={() =>
-                                            handleInputChange(
-                                                "weekday",
-                                                "Sunday"
-                                            )
-                                        }
-                                    >
-                                        Sunday
-                                    </Option>
+                                <Combobox
+                                    defaultValue={data.weekday}
+                                    ref={weekdayRef}
+                                    name="weekday"
+                                    id="weekday"
+                                >
+                                    <Option>Monday</Option>
+                                    <Option>Tuesday</Option>
+                                    <Option>Wednesday</Option>
+                                    <Option>Thursday</Option>
+                                    <Option>Friday</Option>
+                                    <Option>Saturday</Option>
+                                    <Option>Sunday</Option>
                                 </Combobox>
                             </Field>
                             <Field
@@ -206,63 +171,33 @@ export default function EditClassDialog({
                                 }
                             >
                                 <Input
+                                    defaultValue={data.weekDuration.toString()}
+                                    ref={weekDurationRef}
                                     type="number"
-                                    value={classData.weekDuration.toString()}
-                                    onChange={(e) =>
-                                        handleInputChange(
-                                            "weekDuration",
-                                            parseInt(e.target.value)
-                                        )
-                                    }
+                                    name="weekDuration"
+                                    id="weekDuration"
                                 />
                             </Field>
                             <Field label="Class frequency">
                                 <Combobox
+                                    defaultValue={data.classFrequency}
+                                    ref={classFrequencyRef}
+                                    name="classFrequency"
                                     freeform={false}
-                                    value={classData.classFrequency}
+                                    id="classFrequency"
                                 >
-                                    <Option
-                                        onClick={() =>
-                                            handleInputChange(
-                                                "classFrequency",
-                                                "Every week"
-                                            )
-                                        }
-                                    >
-                                        Every week
-                                    </Option>
-                                    <Option
-                                        onClick={() =>
-                                            handleInputChange(
-                                                "classFrequency",
-                                                "Every 2 weeks"
-                                            )
-                                        }
-                                    >
-                                        Every 2 weeks
-                                    </Option>
-                                    <Option
-                                        onClick={() =>
-                                            handleInputChange(
-                                                "classFrequency",
-                                                "Every 3 weeks"
-                                            )
-                                        }
-                                    >
-                                        Every 3 weeks
-                                    </Option>
+                                    <Option>Every week</Option>
+                                    <Option>Every 2 weeks</Option>
+                                    <Option>Every 3 weeks</Option>
                                 </Combobox>
                             </Field>
                             <Field label="Teacher">
                                 <Input
+                                    defaultValue={data.teacher || ""}
+                                    ref={teacherRef}
+                                    name="teacher"
                                     placeholder="Teacher name"
-                                    value={classData.teacher ?? ""}
-                                    onChange={(e) =>
-                                        handleInputChange(
-                                            "teacher",
-                                            e.target.value
-                                        )
-                                    }
+                                    id="teacher"
                                 />
                             </Field>
                         </Flex>
@@ -271,17 +206,7 @@ export default function EditClassDialog({
                         <DialogTrigger action="close" disableButtonEnhancement>
                             <Button appearance="secondary">Close</Button>
                         </DialogTrigger>
-                        <Button
-                            appearance="secondary"
-                            style={{
-                                backgroundColor: "#da3b01",
-                                color: "white",
-                            }}
-                            onClick={() => onClose && onClose(classData)}
-                        >
-                            Delete
-                        </Button>
-                        <Button appearance="primary" onClick={handleSave}>
+                        <Button onClick={handleSave} appearance="primary">
                             Add
                         </Button>
                     </DialogActions>
