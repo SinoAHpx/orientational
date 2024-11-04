@@ -11,21 +11,26 @@ import Flex from "../Universal/Flex";
 import { ClassData } from "../../models/class-data.model";
 import { getNumeralWeekday, getRoundedTime, timeSequence } from "../utils/time";
 
-const getClassSpan = (cls: ClassData) => {
-    const start = cls.startTime.split(":");
-    const end = cls.endTime.split(":");
-    const startSeconds = parseInt(start[0]) * 3600 + parseInt(start[1]) * 60;
-    const endSeconds = parseInt(end[0]) * 3600 + parseInt(end[1]) * 60;
-    const gapSeconds = endSeconds - startSeconds;
+// const getClassSpan = (cls: ClassData) => {
+//     const start = cls.startTime.split(":");
+//     const end = cls.endTime.split(":");
+//     const startSeconds = parseInt(start[0]) * 3600 + parseInt(start[1]) * 60;
+//     const endSeconds = parseInt(end[0]) * 3600 + parseInt(end[1]) * 60;
+//     const gapSeconds = endSeconds - startSeconds;
 
-    const spaces = Math.floor(gapSeconds / 1800);
-    return spaces + 1;
-};
+//     const spaces = Math.floor(gapSeconds / 1800);
+//     return spaces + 1;
+// };
 
 const getStartPosition = (cls: ClassData) => {
     const roundedTime = getRoundedTime(cls.startTime)
     return timeSequence.indexOf(roundedTime) + 1
 };
+
+const getEndPosition = (cls: ClassData) => {
+    const roundedTime = getRoundedTime(cls.endTime)
+    return timeSequence.indexOf(roundedTime) + 2
+}
 
 export default function Class({
     data,
@@ -38,7 +43,7 @@ export default function Class({
         <Card
             onClick={() => {}}
             style={{
-                gridColumn: `${getStartPosition(data)} / span ${getClassSpan(data)}`,
+                gridColumn: `${getStartPosition(data)} / ${getEndPosition(data)}`,
                 gridRowStart: getNumeralWeekday(data.weekday),
                 margin: "20px",
                 height: "105px",
