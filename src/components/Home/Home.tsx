@@ -39,6 +39,7 @@ export default function Home() {
                     width: "98vw",
                     height: "75px",
                     margin: "auto",
+                    zIndex: 1000,
                 }}
                 onAdd={handleAdd}
             />
