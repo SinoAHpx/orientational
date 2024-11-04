@@ -1,8 +1,14 @@
 import { LocalStoragePreset } from "lowdb/browser";
 import { ClassData } from "../../models/class-data.model";
+import { Settings } from "../../models/settings.model";
 
 export const database = await LocalStoragePreset("db.json", {
     classes: [] as ClassData[],
+    settings: {
+        firstWeek: new Date(),
+        totalWeeks: 16,
+        currentWeek: 1
+    } as Settings,
 });
 
 export const pushData = async (data: ClassData) => {

@@ -27,17 +27,21 @@ export default function SettingsDialog({
 }) {
     const firstWeekRef = useRef<HTMLInputElement>(null);
     const totalWeekRef = useRef<HTMLInputElement>(null);
+
+    const onSave = () => {
+        onClose?.({
+            firstWeek: new Date(firstWeekRef.current?.value ?? ""),
+            totalWeeks: parseInt(totalWeekRef.current?.value ?? "1"),
+            currentWeek: 1,
+        });
+    };
+
     return (
         <Dialog
             open={open}
             onOpenChange={() => {
                 if (onClose) {
-                    onClose({
-                        firstWeek: new Date(firstWeekRef.current?.value ?? ""),
-                        totalWeeks: parseInt(
-                            totalWeekRef.current?.value ?? "1"
-                        ),
-                    });
+                    onClose(null);
                 }
             }}
         >
@@ -51,14 +55,14 @@ export default function SettingsDialog({
                             <Field label="First week at">
                                 <DatePicker
                                     ref={firstWeekRef}
-                                    value={settings?.firstWeek}
+                                    value={settings?.firstWeek ? new Date(settings.firstWeek) : new Date()}
                                 />
                             </Field>
                             <Field label="Total weeks">
                                 <Input
                                     type="number"
                                     ref={totalWeekRef}
-                                    value={settings?.totalWeeks?.toString()}
+                                    defaultValue={settings?.totalWeeks?.toString()}
                                 />
                             </Field>
                         </Flex>
@@ -67,7 +71,14 @@ export default function SettingsDialog({
                         <DialogTrigger action="close" disableButtonEnhancement>
                             <Button appearance="secondary">Close</Button>
                         </DialogTrigger>
-                        <Button appearance="primary">Confirm</Button>
+                        <Button
+                            onClick={() => {
+                                onSave();
+                            }}
+                            appearance="primary"
+                        >
+                            Confirm
+                        </Button>
                     </DialogActions>
                 </DialogBody>
             </DialogSurface>
