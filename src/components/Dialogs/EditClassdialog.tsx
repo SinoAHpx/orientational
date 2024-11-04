@@ -225,7 +225,7 @@ export default function EditClassDialog({
                             Delete
                         </Button>
                         <Button onClick={handleSave} appearance="primary">
-                            Add
+                            Apply
                         </Button>
                     </DialogActions>
                 </DialogBody>
