@@ -49,13 +49,12 @@ export default function Home() {
                     margin: "0px",
                     padding: "0px",
                     overflowX: "auto",
+                    top: '50%',
+                    bottom: '50%',
                 }}
             >
                 <div style={{ flex: 1 }}>
                     <ClassesViewer
-                        extraStyle={{
-                            height: "calc(100vh - 120px)",
-                        }}
                         classes={classes}
                         onEdit={handleEdit}
                     />
