@@ -23,7 +23,7 @@ import { ClassData } from "../../models/class-data.model";
 import { useRef } from "react";
 import Flex from "../Universal/Flex";
 import { TimePicker } from "@fluentui/react-timepicker-compat";
-import { getTimeStamp, timeLocalizer } from "../utils/time";
+import { timeLocalizer } from "../utils/time";
 
 export default function EditClassDialog({
     open,
