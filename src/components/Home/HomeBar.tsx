@@ -7,7 +7,6 @@ import {
     Popover,
     PopoverSurface,
     PopoverTrigger,
-    Text,
     Tooltip,
 } from "@fluentui/react-components";
 import {
