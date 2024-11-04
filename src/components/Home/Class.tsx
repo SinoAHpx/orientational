@@ -41,7 +41,7 @@ export default function Class({
     onClick?: (data: ClassData) => void;
 }) {
     return (
-        <Tooltip content={data.title} relationship="description">
+        <Tooltip content={`${data.weekday} ${data.startTime} - ${data.endTime}`} relationship="description">
             <Card
                 onClick={() => {}}
                 style={{
