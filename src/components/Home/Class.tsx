@@ -9,18 +9,37 @@ import {
 import { MoreHorizontal20Regular } from "@fluentui/react-icons";
 import Flex from "../Universal/Flex";
 import { ClassData } from "../../models/class-data.model";
+import { getNumeralWeekday, getRoundedTime, timeSequence } from "../utils/time";
+
+const getClassSpan = (cls: ClassData) => {
+    const start = cls.startTime.split(":");
+    const end = cls.endTime.split(":");
+    const startSeconds = parseInt(start[0]) * 3600 + parseInt(start[1]) * 60;
+    const endSeconds = parseInt(end[0]) * 3600 + parseInt(end[1]) * 60;
+    const gapSeconds = endSeconds - startSeconds;
+
+    const spaces = Math.floor(gapSeconds / 1800);
+    return spaces + 1;
+};
+
+const getStartPosition = (cls: ClassData) => {
+    const roundedTime = getRoundedTime(cls.startTime)
+    return timeSequence.indexOf(roundedTime) + 1
+};
 
 export default function Class({
     data,
     onClick,
 }: {
     data: ClassData;
-    onClick?: () => void;
+    onClick?: (data: ClassData) => void;
 }) {
     return (
         <Card
             onClick={() => {}}
             style={{
+                gridColumn: `${getStartPosition(data)} / span ${getClassSpan(data)}`,
+                gridRowStart: getNumeralWeekday(data.weekday),
                 margin: "20px",
                 height: "105px",
             }}
@@ -31,7 +50,7 @@ export default function Class({
                         appearance="transparent"
                         icon={<MoreHorizontal20Regular />}
                         aria-label="More options"
-                        onClick={onClick}
+                        onClick={() => onClick?.(data)}
                     />
                 }
                 header={<Title3>{data.title}</Title3>}

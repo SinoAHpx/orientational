@@ -1,193 +1,98 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHeader,
-    TableRow,
-    makeStyles,
-} from "@fluentui/react-components";
-import { useState } from "react";
-import Class from "./Class";
+import { Title1, Subtitle1 } from "@fluentui/react-components";
 import { ClassData, defaultClassData } from "../../models/class-data.model";
-import EditClassDialog from "../Dialogs/EditClassdialog";
-import { getRoundedTime } from "../utils/time";
 import { timeSequence } from "../utils/time";
-
-const getClassOccupiedSpaces = (cls: ClassData) => {
-    const start = cls.startTime.split(":");
-    const end = cls.endTime.split(":");
-    const startSeconds = parseInt(start[0]) * 3600 + parseInt(start[1]) * 60;
-    const endSeconds = parseInt(end[0]) * 3600 + parseInt(end[1]) * 60;
-    const gapSeconds = endSeconds - startSeconds;
-
-    const spaces = Math.floor(gapSeconds / 1800);
-    return spaces + 1;
-};
-
-const getFilledRow = (
-    weekdayClasses: ClassData[],
-    overallClick: (classData: ClassData) => void
-): JSX.Element[] => {
-    const cells = [];
-
-    for (const cls of weekdayClasses) {
-        const currentClassIndex = weekdayClasses.indexOf(cls);
-        const classSpaces = getClassOccupiedSpaces(cls);
-        const spaces =
-            currentClassIndex == 0
-                ? timeSequence.indexOf(getRoundedTime(cls.startTime))
-                : timeSequence.indexOf(getRoundedTime(cls.startTime)) -
-                  timeSequence.indexOf(
-                      getRoundedTime(
-                          weekdayClasses[currentClassIndex - 1].startTime
-                      )
-                  ) -
-                  classSpaces;
-
-        for (let index = 0; index < spaces; index++) {
-            cells.push(<TableCell />);
-        }
-        cells.push(
-            <TableCell colSpan={classSpaces}>
-                <Class
-                    key={cls.title + cls.startTime}
-                    onClick={() => overallClick(cls)}
-                    data={cls}
-                />
-            </TableCell>
-        );
-    }
-    return cells;
-};
-
-const getWeekdayRows = (
-    classes: ClassData[],
-    overallClick: (classData: ClassData) => void
-): JSX.Element[][] => {
-    //this seems to be complicated, however its main purpose is to
-    //convert classes into respective weekdays bunches
-    const classesByDay = classes.reduce((acc, cls) => {
-        acc[cls.weekday] = acc[cls.weekday] || [];
-        acc[cls.weekday].push(cls);
-        return acc;
-    }, {} as Record<string, typeof classes>);
-
-    const result = [
-        classesByDay["Monday"] || [],
-        classesByDay["Tuesday"] || [],
-        classesByDay["Wednesday"] || [],
-        classesByDay["Thursday"] || [],
-        classesByDay["Friday"] || [],
-        classesByDay["Saturday"] || [],
-        classesByDay["Sunday"] || [],
-    ].map((classes) => getFilledRow(classes, overallClick));
-
-    return result;
-};
-
-const useStyle = makeStyles({
-    row: {
-        ":hover": {
-            cursor: "default",
-            backgroundColor: "inherit",
-            color: "inherit",
-            transform: "none",
-            boxShadow: "none",
-            outline: "none",
-            textDecoration: "none",
-            filter: "none",
-            opacity: "1",
-        },
-        ":active": {
-            cursor: "default",
-            backgroundColor: "inherit",
-            color: "inherit",
-            transform: "none",
-            boxShadow: "none",
-            outline: "none",
-            textDecoration: "none",
-            filter: "none",
-            opacity: "1",
-        },
-    },
-});
+import Class from "./Class";
+import EditClassDialog from "../Dialogs/EditClassdialog";
+import { useState } from "react";
 
 export default function ClassesViewer({
-    style,
+    extraStyle,
     classes,
 }: {
-    style?: React.CSSProperties;
+    extraStyle?: React.CSSProperties;
     classes: ClassData[];
 }) {
-    const styles = useStyle();
-    const [showEditClassDialog, setShowEditClassDialog] = useState(false);
-    const [clickedClassData, setClickedClassData] =
-        useState<ClassData>(defaultClassData);
-
-    const [
-        mondayClasses,
-        tuesdayClasses,
-        wednesdayClasses,
-        thursdayClasses,
-        fridayClasses,
-        saturdayClasses,
-        sundayClasses,
-    ] = getWeekdayRows(classes, (classData: ClassData) => {
-        setClickedClassData(classData);
-        setShowEditClassDialog(true);
+    const [edit, setEdit] = useState({
+        open: false,
+        data: defaultClassData,
     });
 
-
-
     return (
-        <div
-            style={{
-                ...style,
-            }}
-        >
+        <>
             <EditClassDialog
-                data={clickedClassData}
-                open={showEditClassDialog}
-                onClose={() => setShowEditClassDialog(false)}
+                open={edit.open}
+                data={edit.data}
+                onClose={() => {
+                    setEdit({
+                        ...edit,
+                        open: false,
+                    });
+                }}
             />
-            <Table
+            <div
                 style={{
-                    width: "400vw",
-                    maxWidth: "max(5000px, 98vw)",
-                    margin: "auto",
-                    userSelect: "none",
+                    ...extraStyle,
+                    display: "grid",
+                    gridTemplateColumns: "200px repeat(32, 1fr)",
+                    gridTemplateRows: "50px repeat(7, 1fr)",
+                    width: "800vw",
                 }}
             >
-                <TableHeader>
-                    <TableRow>
-                        {timeSequence.map((time) => (
-                            <TableCell key={`time-${time}`}>{time}</TableCell>
-                        ))}
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    <TableRow className={styles.row}>{mondayClasses}</TableRow>
-                    <TableRow className={styles.row}>{tuesdayClasses}</TableRow>
-                    <TableRow className={styles.row}>
-                        {wednesdayClasses}
-                    </TableRow>
-                    <TableRow className={styles.row}>
-                        {thursdayClasses}
-                    </TableRow>
-                    <TableRow className={styles.row}>{fridayClasses}</TableRow>
-                    <TableRow className={styles.row}>
-                        {saturdayClasses}
-                    </TableRow>
-                    <TableRow
-                        className={styles.row}
-                        style={{
-                            borderBottom: "none",
-                        }}
-                    >
-                        {sundayClasses}
-                    </TableRow>
-                </TableBody>
-            </Table>
-        </div>
+                <div
+                    style={{
+                        gridColumn: "span 1",
+                        gridRowStart: "2",
+                        gridRowEnd: "9",
+                        gridTemplateRows: "repeat(7, 1fr)",
+                        display: "grid",
+                        alignItems: "center",
+                    }}
+                >
+                    <Title1 align="center">Monday</Title1>
+                    <Title1 align="center">Tuesday</Title1>
+                    <Title1 align="center">Wednesday</Title1>
+                    <Title1 align="center">Thursday</Title1>
+                    <Title1 align="center">Friday</Title1>
+                    <Title1 align="center">Saturday</Title1>
+                    <Title1 align="center">Sunday</Title1>
+                </div>
+                <div
+                    style={{
+                        display: "grid",
+                        gridColumnStart: "2",
+                        gridColumnEnd: "34",
+                        gridTemplateColumns: "repeat(32, 1fr)",
+                        alignItems: "center",
+                    }}
+                >
+                    {timeSequence.map((time) => (
+                        <Subtitle1 align="center">{time}</Subtitle1>
+                    ))}
+                </div>
+                <div
+                    style={{
+                        gridColumnStart: "2",
+                        gridColumnEnd: "34",
+                        gridRowStart: "2",
+                        gridRowEnd: "9",
+                        gridTemplateColumns: "repeat(32, 1fr)",
+                        gridTemplateRows: "repeat(7, 1fr)",
+                        display: "grid",
+                    }}
+                >
+                    {classes.map((cls) => (
+                        <Class
+                            data={cls}
+                            onClick={(data) => {
+                                setEdit({
+                                    open: true,
+                                    data: data,
+                                });
+                            }}
+                        />
+                    ))}
+                </div>
+            </div>
+        </>
     );
 }

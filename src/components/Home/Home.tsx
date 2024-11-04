@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import ClassesViewer from "./ClassesView";
 import HomeBar from "./HomeBar";
-import WeekDaysView from "./WeekDaysView";
 import { database } from "../utils/database";
 import { ClassData } from "../../models/class-data.model";
 
@@ -50,10 +49,9 @@ export default function Home() {
                     overflowX: "auto",
                 }}
             >
-                <WeekDaysView />
                 <div style={{ flex: 1 }}>
                     <ClassesViewer
-                        style={{
+                        extraStyle={{
                             height: "calc(100vh - 120px)",
                         }}
                         classes={classes}
