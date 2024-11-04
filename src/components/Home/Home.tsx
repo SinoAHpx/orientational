@@ -23,7 +23,8 @@ export default function Home() {
         if (data == null) {
             return;
         }
-        await updateData(data)
+
+        await updateData(data);
 
         setClasses([...database.data.classes]);
     }

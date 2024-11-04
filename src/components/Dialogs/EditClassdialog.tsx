@@ -16,7 +16,8 @@ import {
     Toast,
     ToastBody,
     Toaster,
-    ToastTitle,useId, 
+    ToastTitle,
+    useId,
     useToastController,
 } from "@fluentui/react-components";
 import { ClassData } from "../../models/class-data.model";
@@ -58,6 +59,10 @@ export default function EditClassDialog({
         onClose(null);
     };
 
+    const handleDelete = () => {
+        onClose({ ...data, title: "delete" });
+    };
+
     const handleSave = () => {
         if (
             titleRef.current &&
@@ -78,7 +83,7 @@ export default function EditClassDialog({
                 weekDuration: parseInt(weekDurationRef.current.value) || 16,
                 classFrequency: classFrequencyRef.current.value,
                 teacher: teacherRef.current.value,
-                identifier: data.identifier
+                identifier: data.identifier,
             };
             //#region check required fields
             if (
@@ -108,10 +113,20 @@ export default function EditClassDialog({
                         <Toaster toasterId={toasterId} />
                         <Flex direction="column" gap="5px">
                             <Field label="Class title" required>
-                                <Input defaultValue={data.title} ref={titleRef} name="title" id="title" />
+                                <Input
+                                    defaultValue={data.title}
+                                    ref={titleRef}
+                                    name="title"
+                                    id="title"
+                                />
                             </Field>
                             <Field label="Room / Building" required>
-                                <Input defaultValue={data.room} ref={roomRef} name="room" id="room" />
+                                <Input
+                                    defaultValue={data.room}
+                                    ref={roomRef}
+                                    name="room"
+                                    id="room"
+                                />
                             </Field>
                             <Flex gap="15px">
                                 <Field
@@ -206,6 +221,9 @@ export default function EditClassDialog({
                         <DialogTrigger action="close" disableButtonEnhancement>
                             <Button appearance="secondary">Close</Button>
                         </DialogTrigger>
+                        <Button onClick={handleDelete} appearance="secondary">
+                            Delete
+                        </Button>
                         <Button onClick={handleSave} appearance="primary">
                             Add
                         </Button>
