@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ClassesViewer from "./ClassesView";
 import HomeBar from "./HomeBar";
-import { database, pushData } from "../utils/database";
+import { database, pushData, updateData } from "../utils/database";
 import { ClassData } from "../../models/class-data.model";
 import { getClassVisibility } from "../utils/time";
 export default function Home() {
@@ -10,18 +10,24 @@ export default function Home() {
         setClasses(database.data.classes);
     }, []);
 
-    const handleEdit = async (data: ClassData | null) => {
+    const handleEdit = async (data: ClassData | null, type: "add" | "edit") => {
         if (data == null) {
             return;
         }
 
-        await pushData({
+        const newData = {
             ...data,
             visible: getClassVisibility(
                 database.data.settings.currentWeek,
                 data
             ),
-        });
+        };
+
+        if (type == "add") {
+            await pushData(newData);
+        } else {
+            await updateData(newData);
+        }
 
         setClasses([...database.data.classes]);
     };
@@ -51,7 +57,7 @@ export default function Home() {
                     margin: "auto",
                     zIndex: 1000,
                 }}
-                onAdd={handleEdit}
+                onAdd={(d) => handleEdit(d, "add")}
                 onWeekChange={handleWeekChange}
             />
             <div
@@ -66,7 +72,10 @@ export default function Home() {
                 }}
             >
                 <div style={{ flex: 1 }}>
-                    <ClassesViewer classes={classes} onEdit={handleEdit} />
+                    <ClassesViewer
+                        classes={classes}
+                        onEdit={(d) => handleEdit(d, "edit")}
+                    />
                 </div>
             </div>
         </>

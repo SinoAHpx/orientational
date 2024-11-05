@@ -23,13 +23,9 @@ export const updateData = async (data: ClassData) => {
     const removed = database.data.classes.filter(
         (d) => d.identifier != data.identifier
     );
-    console.log(data);
     if (data.title != "delete") {
-        console.log('this should not display');
-        
         removed.push(data);
     }
-    console.log(removed);
     
     database.data.classes = removed;
 
