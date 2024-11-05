@@ -30,7 +30,7 @@ export default function HomeBar({
 }: {
     style?: React.CSSProperties;
     onAdd: (data: ClassData | null) => void;
-    onWeekChange: (week: number) => void
+    onWeekChange: (week: number) => void;
 }) {
     const [showAddDialog, setShowAddDialog] = useState(false);
     const [showSettingsDialog, setShowSettingsialog] = useState(false);
@@ -61,22 +61,41 @@ export default function HomeBar({
         setShowSettingsialog(false);
     };
 
-    const handleWeek = async (type: 'next' | 'previous') => {
-        if (currentWeek == 1 && type == 'previous') {
+    const handleWeek = async (type: "next" | "previous") => {
+        if (currentWeek == 1 && type == "previous") {
             return;
         }
-        if (currentWeek == database.data.settings.totalWeeks && type == 'next') {
+        if (
+            currentWeek == database.data.settings.totalWeeks &&
+            type == "next"
+        ) {
             return;
         }
-        const i = type == 'next' ? 1 : -1
+        const i = type == "next" ? 1 : -1;
 
         setCurrentWeek(currentWeek + i);
 
         database.data.settings.currentWeek += i;
         await database.write();
 
-        onWeekChange(database.data.settings.currentWeek)
+        onWeekChange(database.data.settings.currentWeek);
     };
+
+    const handleExport = () => {
+        const json = JSON.stringify(database.data);
+        const blob = new Blob([json], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "database_export.json"; 
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+
+    const handleImport = () => {};
 
     return (
         <>
@@ -113,7 +132,9 @@ export default function HomeBar({
                                     content="Previous week"
                                     relationship="label"
                                 >
-                                    <Button onClick={() => handleWeek('previous')}>
+                                    <Button
+                                        onClick={() => handleWeek("previous")}
+                                    >
                                         <ChevronLeftRegular />
                                     </Button>
                                 </Tooltip>
@@ -121,7 +142,7 @@ export default function HomeBar({
                                     content="Next week"
                                     relationship="label"
                                 >
-                                    <Button onClick={() => handleWeek('next')}>
+                                    <Button onClick={() => handleWeek("next")}>
                                         <ChevronRightRegular />
                                     </Button>
                                 </Tooltip>
@@ -145,8 +166,8 @@ export default function HomeBar({
                 </Flex>
 
                 <Flex gap="15px">
-                    <Button>Export</Button>
-                    <Button>Import</Button>
+                    <Button onClick={handleExport}>Export</Button>
+                    <Button onClick={handleImport}>Import</Button>
                     <DialogTrigger>
                         <Button onClick={handleSettingClick}>Settings</Button>
                     </DialogTrigger>
