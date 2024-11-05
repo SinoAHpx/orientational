@@ -1,3 +1,5 @@
+import { ClassData } from "../../models/class-data.model";
+
 export const timeLocalizer = (date: Date) => {
     return date.toLocaleTimeString("en-US", {
         hour: "2-digit",
@@ -44,4 +46,21 @@ export const getNumeralWeekday = (weekday: string) => {
 
 export const getTimeStamp = () => {
     return Date.now().toString();
+}
+
+export const getClassVisibility = (week: number, data: ClassData) => {
+    if (data.weekDuration < week) {
+        return false
+    }
+    if (data.classFrequency == 'Every week') {
+        return true
+    }
+    if (data.classFrequency == 'Every 2 weeks') {
+        return week % 2 == 0
+    }
+    if (data.classFrequency == 'Every 3 weeks') {
+        return week % 3 == 0
+    }
+
+    return true
 }

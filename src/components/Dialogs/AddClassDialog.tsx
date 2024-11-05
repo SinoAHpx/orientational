@@ -77,7 +77,8 @@ export default function AddClassDialog({
                 weekDuration: parseInt(weekDurationRef.current.value) || 16,
                 classFrequency: classFrequencyRef.current.value,
                 teacher: teacherRef.current.value,
-                identifier: getTimeStamp()
+                identifier: getTimeStamp(),
+                visible: true
             };
             //#region check required fields
             if (

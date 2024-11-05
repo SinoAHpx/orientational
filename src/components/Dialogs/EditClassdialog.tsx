@@ -84,6 +84,7 @@ export default function EditClassDialog({
                 classFrequency: classFrequencyRef.current.value,
                 teacher: teacherRef.current.value,
                 identifier: data.identifier,
+                visible: true
             };
             //#region check required fields
             if (

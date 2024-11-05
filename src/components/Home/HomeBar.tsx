@@ -23,12 +23,15 @@ import { ClassData } from "../../models/class-data.model";
 import { database } from "../utils/database";
 import { Settings } from "../../models/settings.model";
 
-interface HomeBarProps {
+export default function HomeBar({
+    style,
+    onAdd,
+    onWeekChange,
+}: {
     style?: React.CSSProperties;
     onAdd: (data: ClassData | null) => void;
-}
-
-export default function HomeBar({ style, onAdd }: HomeBarProps) {
+    onWeekChange: (week: number) => void
+}) {
     const [showAddDialog, setShowAddDialog] = useState(false);
     const [showSettingsDialog, setShowSettingsialog] = useState(false);
     const [settings, setSettings] = useState(database.data.settings);
@@ -46,7 +49,7 @@ export default function HomeBar({ style, onAdd }: HomeBarProps) {
 
     const handleSettings = async (settings: Settings | null) => {
         if (settings == null) {
-            setShowSettingsialog(false)
+            setShowSettingsialog(false);
             return;
         }
 
@@ -66,6 +69,8 @@ export default function HomeBar({ style, onAdd }: HomeBarProps) {
 
         database.data.settings.currentWeek -= 1;
         await database.write();
+
+        onWeekChange(database.data.settings.currentWeek)
     };
 
     const handleNextWeek = async () => {
@@ -76,6 +81,8 @@ export default function HomeBar({ style, onAdd }: HomeBarProps) {
 
         database.data.settings.currentWeek += 1;
         await database.write();
+
+        onWeekChange(database.data.settings.currentWeek)
     };
 
     return (
