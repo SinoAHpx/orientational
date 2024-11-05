@@ -61,25 +61,18 @@ export default function HomeBar({
         setShowSettingsialog(false);
     };
 
-    const handlePreviousWeek = async () => {
-        if (currentWeek == 1) {
+    const handleWeek = async (type: 'next' | 'previous') => {
+        if (currentWeek == 1 && type == 'previous') {
             return;
         }
-        setCurrentWeek(currentWeek - 1);
-
-        database.data.settings.currentWeek -= 1;
-        await database.write();
-
-        onWeekChange(database.data.settings.currentWeek)
-    };
-
-    const handleNextWeek = async () => {
-        if (currentWeek == database.data.settings.totalWeeks) {
+        if (currentWeek == database.data.settings.totalWeeks && type == 'next') {
             return;
         }
-        setCurrentWeek(currentWeek + 1);
+        const i = type == 'next' ? 1 : -1
 
-        database.data.settings.currentWeek += 1;
+        setCurrentWeek(currentWeek + i);
+
+        database.data.settings.currentWeek += i;
         await database.write();
 
         onWeekChange(database.data.settings.currentWeek)
@@ -120,7 +113,7 @@ export default function HomeBar({
                                     content="Previous week"
                                     relationship="label"
                                 >
-                                    <Button onClick={handlePreviousWeek}>
+                                    <Button onClick={() => handleWeek('previous')}>
                                         <ChevronLeftRegular />
                                     </Button>
                                 </Tooltip>
@@ -128,7 +121,7 @@ export default function HomeBar({
                                     content="Next week"
                                     relationship="label"
                                 >
-                                    <Button onClick={handleNextWeek}>
+                                    <Button onClick={() => handleWeek('next')}>
                                         <ChevronRightRegular />
                                     </Button>
                                 </Tooltip>
