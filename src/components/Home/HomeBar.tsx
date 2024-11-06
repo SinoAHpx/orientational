@@ -15,6 +15,7 @@ import {
     TeachingPopoverTitle,
     TeachingPopoverTrigger,
     Text,
+    Title3,
     Tooltip,
 } from "@fluentui/react-components";
 import {
@@ -25,9 +26,9 @@ import {
 } from "@fluentui/react-icons";
 import Flex from "../Universal/Flex";
 import AddClassDialog from "../Dialogs/AddClassDialog";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import SettingsDialog from "../Settings/SettingsDialog";
-import { ClassData } from "../../models/class-data.model";
+import { ClassData, defaultClassData } from "../../models/class-data.model";
 import { database } from "../utils/database";
 import { Settings } from "../../models/settings.model";
 
@@ -46,6 +47,12 @@ export default function HomeBar({
     const [currentWeek, setCurrentWeek] = useState(
         database.data.settings.currentWeek
     );
+    const [searchResult, setSearchResult] = useState({
+        open: false,
+        data: defaultClassData,
+    });
+
+    const searchRef = useRef<HTMLInputElement>(null);
 
     const handleAddClick = () => {
         setShowAddDialog(true);
@@ -247,8 +254,53 @@ export default function HomeBar({
                 </Flex>
 
                 <Flex gap="15px">
-                    <Input placeholder="Search for classes" />
-                    <Button icon={<SearchRegular />}>Search</Button>
+                    <Input ref={searchRef} placeholder="Search for classes" />
+
+                    <TeachingPopover
+                        open={searchResult.open}
+                        onOpenChange={() => {
+                            if (
+                                searchRef.current &&
+                                searchRef.current.value != ""
+                            ) {
+                                const data = database.data.classes.filter((c) =>
+                                    c.title.includes(searchRef.current!.value!)
+                                )[0];
+                                if (data === undefined || data === null) {
+                                    return;
+                                }
+
+                                setSearchResult({
+                                    open: !searchResult.open,
+                                    data,
+                                });
+                            }
+                        }}
+                    >
+                        <TeachingPopoverTrigger disableButtonEnhancement>
+                            <Button icon={<SearchRegular />}>Search</Button>
+                        </TeachingPopoverTrigger>
+                        <TeachingPopoverSurface>
+                            <TeachingPopoverHeader>
+                                Searching
+                            </TeachingPopoverHeader>
+                            <TeachingPopoverBody>
+                                <Title3>{searchResult.data.title}</Title3>
+                                <Flex gap="10px">
+                                    <Badge style={{ padding: "15px" }}>
+                                        {searchResult.data.room}
+                                    </Badge>
+                                    <Badge
+                                        color="informative"
+                                        style={{ padding: "15px" }}
+                                    >
+                                        {searchResult.data.startTime}-
+                                        {searchResult.data.endTime}
+                                    </Badge>
+                                </Flex>
+                            </TeachingPopoverBody>
+                        </TeachingPopoverSurface>
+                    </TeachingPopover>
                 </Flex>
             </Card>
         </>
