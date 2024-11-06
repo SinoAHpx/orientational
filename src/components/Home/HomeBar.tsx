@@ -7,6 +7,14 @@ import {
     Popover,
     PopoverSurface,
     PopoverTrigger,
+    TeachingPopover,
+    TeachingPopoverBody,
+    TeachingPopoverFooter,
+    TeachingPopoverHeader,
+    TeachingPopoverSurface,
+    TeachingPopoverTitle,
+    TeachingPopoverTrigger,
+    Text,
     Tooltip,
 } from "@fluentui/react-components";
 import {
@@ -33,7 +41,7 @@ export default function HomeBar({
     onWeekChange: (week: number) => void;
 }) {
     const [showAddDialog, setShowAddDialog] = useState(false);
-    const [showSettingsDialog, setShowSettingsialog] = useState(false);
+    const [showSettingsDialog, setShowSettingsDialog] = useState(false);
     const [settings, setSettings] = useState(database.data.settings);
     const [currentWeek, setCurrentWeek] = useState(
         database.data.settings.currentWeek
@@ -44,12 +52,12 @@ export default function HomeBar({
     };
 
     const handleSettingClick = () => {
-        setShowSettingsialog(true);
+        setShowSettingsDialog(true);
     };
 
     const handleSettings = async (settings: Settings | null) => {
         if (settings == null) {
-            setShowSettingsialog(false);
+            setShowSettingsDialog(false);
             return;
         }
 
@@ -58,7 +66,7 @@ export default function HomeBar({
 
         setSettings(database.data.settings);
 
-        setShowSettingsialog(false);
+        setShowSettingsDialog(false);
     };
 
     const handleWeek = async (type: "next" | "previous") => {
@@ -88,14 +96,45 @@ export default function HomeBar({
 
         const link = document.createElement("a");
         link.href = url;
-        link.download = "database_export.json"; 
+        link.download = "database_export.json";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
     };
 
-    const handleImport = () => {};
+    const handleImport = () => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".json";
+
+        input.onchange = (e) => {
+            const file = (e.target as HTMLInputElement).files?.[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    const content = e.target?.result;
+                    if (typeof content === "string") {
+                        database.data = JSON.parse(content);
+                        await database.write();
+                    }
+                } catch (error) {
+                    console.error("Error importing file:", error);
+                } finally {
+                    reader.onload = null;
+                    input.onchange = null;
+                    input.remove();
+
+                    window.location.reload();
+                }
+            };
+            reader.readAsText(file);
+        };
+
+        input.click();
+    };
 
     return (
         <>
@@ -167,7 +206,36 @@ export default function HomeBar({
 
                 <Flex gap="15px">
                     <Button onClick={handleExport}>Export</Button>
-                    <Button onClick={handleImport}>Import</Button>
+                    {database.data.classes.length == 0 ? (
+                        <Button onClick={handleImport}>Import</Button>
+                    ) : (
+                        <TeachingPopover>
+                            <TeachingPopoverTrigger>
+                                <Button>Import</Button>
+                            </TeachingPopoverTrigger>
+                            <TeachingPopoverSurface>
+                                <TeachingPopoverHeader>
+                                    Tips
+                                </TeachingPopoverHeader>
+                                <TeachingPopoverBody>
+                                    <TeachingPopoverTitle>
+                                        This Action will override current
+                                        classes
+                                    </TeachingPopoverTitle>
+                                    <Text>
+                                        Press "continue" if you'd confirm.
+                                    </Text>
+                                </TeachingPopoverBody>
+                                <TeachingPopoverFooter
+                                    primary={{
+                                        onClick: handleImport,
+                                        children: "Continue",
+                                    }}
+                                    secondary="Cancel"
+                                />
+                            </TeachingPopoverSurface>
+                        </TeachingPopover>
+                    )}
                     <DialogTrigger>
                         <Button onClick={handleSettingClick}>Settings</Button>
                     </DialogTrigger>
