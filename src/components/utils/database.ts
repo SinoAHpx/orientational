@@ -7,7 +7,7 @@ export const database = await LocalStoragePreset("db.json", {
     settings: {
         firstWeek: new Date(),
         totalWeeks: 16,
-        currentWeek: 1
+        currentWeek: 1,
     } as Settings,
 });
 

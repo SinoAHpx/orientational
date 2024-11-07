@@ -55,7 +55,11 @@ export default function SettingsDialog({
                             <Field label="First week at">
                                 <DatePicker
                                     ref={firstWeekRef}
-                                    value={settings?.firstWeek ? new Date(settings.firstWeek) : new Date()}
+                                    value={
+                                        settings?.firstWeek
+                                            ? new Date(settings.firstWeek)
+                                            : new Date()
+                                    }
                                 />
                             </Field>
                             <Field label="Total weeks">
