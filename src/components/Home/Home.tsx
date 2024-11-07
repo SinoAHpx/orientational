@@ -7,7 +7,16 @@ import { getClassVisibility } from "../utils/time";
 export default function Home() {
     const [classes, setClasses] = useState<ClassData[]>([]);
     useEffect(() => {
+
+        // const currentWeek = new Date()
+        // const weeks = getWeeksGap(currentWeek, database.data.settings.firstWeek)
+        // console.log(`Week gap: ${weeks}`);
+        
+        // database.data.settings.currentWeek = weeks
+        // database.write()
+
         setClasses(database.data.classes);
+        
     }, []);
 
     const handleEdit = async (data: ClassData | null, type: "add" | "edit") => {

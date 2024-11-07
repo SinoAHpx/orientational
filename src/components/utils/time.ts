@@ -7,7 +7,7 @@ export const timeLocalizer = (date: Date) => {
         hour12: false,
     });
 };
- 
+
 export const timeSequence = (() => {
     const times = [];
     for (let hour = 7; hour < 23; hour++) {
@@ -46,21 +46,33 @@ export const getNumeralWeekday = (weekday: string) => {
 
 export const getTimeStamp = () => {
     return Date.now().toString();
-}
+};
 
 export const getClassVisibility = (week: number, data: ClassData) => {
     if (data.weekDuration < week) {
-        return false
+        return false;
     }
-    if (data.classFrequency == 'Every week') {
-        return true
+    if (data.classFrequency == "Every week") {
+        return true;
     }
-    if (data.classFrequency == 'Every 2 weeks') {
-        return week % 2 == 0
+    if (data.classFrequency == "Every 2 weeks") {
+        return week % 2 == 0;
     }
-    if (data.classFrequency == 'Every 3 weeks') {
-        return week % 3 == 0
+    if (data.classFrequency == "Every 3 weeks") {
+        return week % 3 == 0;
     }
 
-    return true
-}
+    return true;
+};
+
+export const getWeeksGap = (left: Date, right: Date) => {
+    const leftMilliseconds = left.getTime();
+    const rightMilliseconds =
+        typeof right === "string" ? Date.parse(right) : right.getTime();
+
+    const milliseconds = leftMilliseconds - rightMilliseconds
+    const rawDays = milliseconds / (1000 * 3600 * 24);
+    const days = Math.floor(rawDays);
+
+    return Math.floor(days / 7) + 1;
+};
