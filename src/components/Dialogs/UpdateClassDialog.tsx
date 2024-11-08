@@ -26,13 +26,17 @@ import { TimePicker } from "@fluentui/react-timepicker-compat";
 import { getTimeStamp, timeLocalizer } from "../../utils/time";
 import { useRef } from "react";
 
-export default function AddClassDialog({
+export default function UpdateClassDialog({
     open,
+    data = null,
     onClose,
 }: {
     open: boolean;
+    data?: ClassData | null;
     onClose: (data: ClassData | null) => void;
 }) {
+    const isEdit = data != null;
+
     const titleRef = useRef<HTMLInputElement>(null);
     const roomRef = useRef<HTMLInputElement>(null);
     const startTimeRef = useRef<HTMLInputElement>(null);
@@ -57,6 +61,12 @@ export default function AddClassDialog({
         onClose(null);
     };
 
+    const handleDelete = () => {
+        if (isEdit) {
+            onClose({ ...data!, title: "delete" });
+        }
+    };
+
     const handleSave = () => {
         if (
             titleRef.current &&
@@ -78,7 +88,7 @@ export default function AddClassDialog({
                 classFrequency: classFrequencyRef.current.value,
                 teacher: teacherRef.current.value,
                 identifier: getTimeStamp(),
-                visible: true
+                visible: true,
             };
             //#region check required fields
             if (
@@ -108,10 +118,20 @@ export default function AddClassDialog({
                         <Toaster toasterId={toasterId} />
                         <Flex direction="column" gap="5px">
                             <Field label="Class title" required>
-                                <Input ref={titleRef} name="title" id="title" />
+                                <Input
+                                    defaultValue={data?.title}
+                                    ref={titleRef}
+                                    name="title"
+                                    id="title"
+                                />
                             </Field>
                             <Field label="Room / Building" required>
-                                <Input ref={roomRef} name="room" id="room" />
+                                <Input
+                                    defaultValue={data?.room}
+                                    ref={roomRef}
+                                    name="room"
+                                    id="room"
+                                />
                             </Field>
                             <Flex gap="15px">
                                 <Field
@@ -121,6 +141,7 @@ export default function AddClassDialog({
                                 >
                                     <TimePicker
                                         ref={startTimeRef}
+                                        defaultValue={data?.startTime}
                                         name="startTime"
                                         id="startTime"
                                         increment={5}
@@ -136,6 +157,7 @@ export default function AddClassDialog({
                                 >
                                     <TimePicker
                                         ref={endTimeRef}
+                                        defaultValue={data?.endTime}
                                         name="endTime"
                                         id="endTime"
                                         increment={5}
@@ -150,6 +172,7 @@ export default function AddClassDialog({
                                     ref={weekdayRef}
                                     name="weekday"
                                     id="weekday"
+                                    defaultValue={data?.weekday}
                                 >
                                     <Option>Monday</Option>
                                     <Option>Tuesday</Option>
@@ -169,6 +192,7 @@ export default function AddClassDialog({
                             >
                                 <Input
                                     ref={weekDurationRef}
+                                    defaultValue={data?.weekDuration.toString()}
                                     type="number"
                                     name="weekDuration"
                                     id="weekDuration"
@@ -180,6 +204,7 @@ export default function AddClassDialog({
                                     name="classFrequency"
                                     freeform={false}
                                     id="classFrequency"
+                                    defaultValue={data?.classFrequency}
                                 >
                                     <Option>Every week</Option>
                                     <Option>Every 2 weeks</Option>
@@ -189,6 +214,7 @@ export default function AddClassDialog({
                             <Field label="Teacher">
                                 <Input
                                     ref={teacherRef}
+                                    defaultValue={data?.teacher}
                                     name="teacher"
                                     placeholder="Teacher name"
                                     id="teacher"
@@ -200,8 +226,16 @@ export default function AddClassDialog({
                         <DialogTrigger action="close" disableButtonEnhancement>
                             <Button appearance="secondary">Close</Button>
                         </DialogTrigger>
+                        {isEdit && (
+                            <Button
+                                onClick={handleDelete}
+                                appearance="secondary"
+                            >
+                                Delete
+                            </Button>
+                        )}
                         <Button onClick={handleSave} appearance="primary">
-                            Add
+                            {isEdit ? "Apply" : "Add"}
                         </Button>
                     </DialogActions>
                 </DialogBody>

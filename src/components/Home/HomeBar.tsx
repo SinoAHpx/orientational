@@ -25,12 +25,12 @@ import {
     SearchRegular,
 } from "@fluentui/react-icons";
 import Flex from "../Universal/Flex";
-import AddClassDialog from "../Dialogs/AddClassDialog";
 import { useRef, useState } from "react";
 import SettingsDialog from "../Dialogs/SettingsDialog";
 import { ClassData, defaultClassData } from "../../models/class-data.model";
 import { database } from "../../utils/database";
 import { Settings } from "../../models/settings.model";
+import UpdateClassDialog from "../Dialogs/UpdateClassDialog";
 
 export default function HomeBar({
     style,
@@ -202,7 +202,8 @@ export default function HomeBar({
                     >
                         Add
                     </Button>
-                    <AddClassDialog
+                    <UpdateClassDialog
+                        
                         open={showAddDialog}
                         onClose={(data) => {
                             onAdd(data);

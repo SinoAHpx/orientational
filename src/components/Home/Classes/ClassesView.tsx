@@ -2,9 +2,9 @@ import { Title1, Subtitle1 } from "@fluentui/react-components";
 import { ClassData, defaultClassData } from "../../../models/class-data.model";
 import { timeSequence } from "../../../utils/time";
 import Class from "./Class";
-import EditClassDialog from "../../Dialogs/EditClassdialog";
 import { useState } from "react";
 import Flex from "../../Universal/Flex";
+import UpdateClassDialog from "../../Dialogs/UpdateClassDialog";
 
 export default function ClassesViewer({
     extraStyle,
@@ -22,7 +22,7 @@ export default function ClassesViewer({
 
     return (
         <>
-            <EditClassDialog
+            <UpdateClassDialog
                 open={edit.open}
                 data={edit.data}
                 onClose={(data) => {
