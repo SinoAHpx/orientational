@@ -31,17 +31,16 @@ import { ClassData, defaultClassData } from "../../../models/class-data.model";
 import { database } from "../../../utils/database";
 import { Settings } from "../../../models/settings.model";
 import UpdateClassDialog from "../../Dialogs/UpdateClassDialog";
+import { getWeeksGap } from "../../../utils/time";
 
 export default function HomeBar({
     style,
     onAdd,
     onWeekChange,
-    onSettingsChange,
 }: {
     style?: React.CSSProperties;
     onAdd: (data: ClassData | null) => void;
     onWeekChange: (week: number) => void;
-    onSettingsChange: (settings: Settings) => void;
 }) {
     const [showAddDialog, setShowAddDialog] = useState(false);
     const [showSettingsDialog, setShowSettingsDialog] = useState(false);
@@ -67,16 +66,19 @@ export default function HomeBar({
     const handleSettings = async (settings: Settings | null) => {
         if (settings == null) {
             setShowSettingsDialog(false);
+
             return;
         }
 
         database.data.settings = { ...settings, currentWeek };
         await database.write();
-
-        onSettingsChange(database.data.settings);
-
         setSettings(database.data.settings);
         setShowSettingsDialog(false);
+
+        const weeks = getWeeksGap(new Date(), database.data.settings.firstWeek);
+        //todo: add prompt if weeks is bigger than total weeks
+
+        setCurrentWeek(weeks)
     };
 
     const handleWeek = async (type: "next" | "previous") => {

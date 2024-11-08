@@ -4,17 +4,10 @@ import HomeBar from "./HomeBar/HomeBar";
 import { database, pushData, updateData } from "../../utils/database";
 import { ClassData } from "../../models/class-data.model";
 import { getClassVisibility } from "../../utils/time";
-import { Settings } from "../../models/settings.model";
+
 export default function Home() {
     const [classes, setClasses] = useState<ClassData[]>([]);
     useEffect(() => {
-        // const currentWeek = new Date()
-        // const weeks = getWeeksGap(currentWeek, database.data.settings.firstWeek)
-        // console.log(`Week gap: ${weeks}`);
-
-        // database.data.settings.currentWeek = weeks
-        // database.write()
-
         setClasses(database.data.classes);
     }, []);
 
@@ -52,7 +45,7 @@ export default function Home() {
         setClasses([...database.data.classes]);
     };
 
-    const handleSettingChange = (setting: Settings) => {};
+
 
     return (
         <>
@@ -69,7 +62,6 @@ export default function Home() {
                 }}
                 onAdd={(d) => handleEdit(d, "add")}
                 onWeekChange={handleWeekChange}
-                onSettingsChange={handleSettingChange}
             />
             <div
                 style={{
