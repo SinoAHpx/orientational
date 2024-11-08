@@ -1,10 +1,10 @@
 import { Title1, Subtitle1 } from "@fluentui/react-components";
-import { ClassData, defaultClassData } from "../../models/class-data.model";
-import { timeSequence } from "../../utils/time";
+import { ClassData, defaultClassData } from "../../../models/class-data.model";
+import { timeSequence } from "../../../utils/time";
 import Class from "./Class";
-import EditClassDialog from "../Dialogs/EditClassdialog";
+import EditClassDialog from "../../Dialogs/EditClassdialog";
 import { useState } from "react";
-import Flex from "../Universal/Flex";
+import Flex from "../../Universal/Flex";
 
 export default function ClassesViewer({
     extraStyle,

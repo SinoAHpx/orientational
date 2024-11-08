@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ClassesViewer from "./ClassesView";
+import ClassesViewer from "./Classes/ClassesView";
 import HomeBar from "./HomeBar";
 import { database, pushData, updateData } from "../../utils/database";
 import { ClassData } from "../../models/class-data.model";

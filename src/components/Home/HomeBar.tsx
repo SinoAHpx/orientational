@@ -27,7 +27,7 @@ import {
 import Flex from "../Universal/Flex";
 import AddClassDialog from "../Dialogs/AddClassDialog";
 import { useRef, useState } from "react";
-import SettingsDialog from "../Settings/SettingsDialog";
+import SettingsDialog from "../Dialogs/SettingsDialog";
 import { ClassData, defaultClassData } from "../../models/class-data.model";
 import { database } from "../../utils/database";
 import { Settings } from "../../models/settings.model";
