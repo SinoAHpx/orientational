@@ -29,7 +29,7 @@ import AddClassDialog from "../Dialogs/AddClassDialog";
 import { useRef, useState } from "react";
 import SettingsDialog from "../Settings/SettingsDialog";
 import { ClassData, defaultClassData } from "../../models/class-data.model";
-import { database } from "../utils/database";
+import { database } from "../../utils/database";
 import { Settings } from "../../models/settings.model";
 
 export default function HomeBar({

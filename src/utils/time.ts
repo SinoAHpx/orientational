@@ -1,4 +1,4 @@
-import { ClassData } from "../../models/class-data.model";
+import { ClassData } from "../models/class-data.model";
 
 export const timeLocalizer = (date: Date) => {
     return date.toLocaleTimeString("en-US", {

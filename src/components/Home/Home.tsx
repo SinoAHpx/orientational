@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import ClassesViewer from "./ClassesView";
 import HomeBar from "./HomeBar";
-import { database, pushData, updateData } from "../utils/database";
+import { database, pushData, updateData } from "../../utils/database";
 import { ClassData } from "../../models/class-data.model";
-import { getClassVisibility } from "../utils/time";
+import { getClassVisibility } from "../../utils/time";
 export default function Home() {
     const [classes, setClasses] = useState<ClassData[]>([]);
     useEffect(() => {

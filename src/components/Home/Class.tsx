@@ -10,7 +10,7 @@ import {
 import { MoreHorizontal20Regular } from "@fluentui/react-icons";
 import Flex from "../Universal/Flex";
 import { ClassData } from "../../models/class-data.model";
-import { getNumeralWeekday, getRoundedTime, timeSequence } from "../utils/time";
+import { getNumeralWeekday, getRoundedTime, timeSequence } from "../../utils/time";
 
 const getStartPosition = (cls: ClassData) => {
     const roundedTime = getRoundedTime(cls.startTime);
