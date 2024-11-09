@@ -41,7 +41,7 @@ export default function ClassesViewer({
                         display: "grid",
                         gridTemplateColumns: "200px repeat(32, 1fr)",
                         gridTemplateRows: "50px repeat(7, 1fr)",
-                        width: "800vw",
+                        width: "min(300vw, 4000px)",
                     }}
                 >
                     <div
