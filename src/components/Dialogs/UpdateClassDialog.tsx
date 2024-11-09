@@ -87,7 +87,7 @@ export default function UpdateClassDialog({
                 weekDuration: parseInt(weekDurationRef.current.value) || 16,
                 classFrequency: classFrequencyRef.current.value,
                 teacher: teacherRef.current.value,
-                identifier: getTimeStamp(),
+                identifier: isEdit ? data.identifier : getTimeStamp(),
                 visible: true,
             };
             //#region check required fields

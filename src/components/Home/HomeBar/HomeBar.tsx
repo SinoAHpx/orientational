@@ -59,8 +59,6 @@ export default function HomeBar({
         if (currentWeek < database.data.settings.totalWeeks) {
             setCurrentWeek(initialGap)
         }
-
-        console.log('Initial gap:' + initialGap);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
