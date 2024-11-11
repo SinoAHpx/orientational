@@ -8,9 +8,13 @@ import {
     Tooltip,
 } from "@fluentui/react-components";
 import { MoreHorizontal20Regular } from "@fluentui/react-icons";
-import Flex from "../../Universal/Flex";
+import Flex from "../../universal/Flex";
 import { ClassData } from "../../../models/class-data.model";
-import { getNumeralWeekday, getRoundedTime, timeSequence } from "../../../utils/time";
+import {
+    getNumeralWeekday,
+    getRoundedTime,
+    timeSequence,
+} from "../../../utils/time";
 
 const getStartPosition = (cls: ClassData) => {
     const roundedTime = getRoundedTime(cls.startTime);
@@ -43,7 +47,7 @@ export default function Class({
                     gridRowStart: getNumeralWeekday(data.weekday),
                     margin: "20px",
                     height: "105px",
-                    visibility: data.visible ? 'visible' : 'hidden'
+                    visibility: data.visible ? "visible" : "hidden",
                 }}
             >
                 <CardHeader

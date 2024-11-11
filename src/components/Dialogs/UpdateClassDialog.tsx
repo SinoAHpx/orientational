@@ -21,7 +21,7 @@ import {
     useToastController,
 } from "@fluentui/react-components";
 import { ClassData } from "../../models/class-data.model";
-import Flex from "../Universal/Flex";
+import Flex from "../universal/Flex";
 import { TimePicker } from "@fluentui/react-timepicker-compat";
 import { getTimeStamp, timeLocalizer } from "../../utils/time";
 import { useRef } from "react";

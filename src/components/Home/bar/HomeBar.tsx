@@ -24,7 +24,7 @@ import {
     ChevronRightRegular,
     SearchRegular,
 } from "@fluentui/react-icons";
-import Flex from "../../Universal/Flex";
+import Flex from "../../universal/Flex";
 import { useEffect, useRef, useState } from "react";
 import SettingsDialog from "../../Dialogs/SettingsDialog";
 import { ClassData, defaultClassData } from "../../../models/class-data.model";
@@ -55,12 +55,15 @@ export default function HomeBar({
 
     //this is for auto change week to present, as initially mounted
     useEffect(() => {
-        const initialGap = getWeeksGap(new Date(), database.data.settings.firstWeek)
+        const initialGap = getWeeksGap(
+            new Date(),
+            database.data.settings.firstWeek
+        );
         if (currentWeek < database.data.settings.totalWeeks) {
-            setCurrentWeek(initialGap)
+            setCurrentWeek(initialGap);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const searchRef = useRef<HTMLInputElement>(null);
 
@@ -87,7 +90,7 @@ export default function HomeBar({
         const weeks = getWeeksGap(new Date(), database.data.settings.firstWeek);
         //todo: add prompt if weeks is bigger than total weeks
 
-        setCurrentWeek(weeks)
+        setCurrentWeek(weeks);
     };
 
     const handleWeek = async (type: "next" | "previous") => {

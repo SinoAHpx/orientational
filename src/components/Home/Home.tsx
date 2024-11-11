@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import ClassesViewer from "./Classes/ClassesView";
-import HomeBar from "./HomeBar/HomeBar";
+import ClassesViewer from "./classes/ClassesView";
+import HomeBar from "./bar/HomeBar";
 import { database, pushData, updateData } from "../../utils/database";
 import { ClassData } from "../../models/class-data.model";
 import { getClassVisibility } from "../../utils/time";

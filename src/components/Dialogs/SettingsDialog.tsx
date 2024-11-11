@@ -14,7 +14,7 @@ import {
 import { DatePicker } from "@fluentui/react-datepicker-compat";
 import { useRef } from "react";
 import { Settings } from "../../models/settings.model";
-import Flex from "../Universal/Flex";
+import Flex from "../universal/Flex";
 import { database, defaultData } from "../../utils/database";
 
 export default function SettingsDialog({
@@ -77,13 +77,17 @@ export default function SettingsDialog({
                             <Button appearance="secondary">Close</Button>
                         </DialogTrigger>
                         <DialogTrigger action="close" disableButtonEnhancement>
-                            <Button onClick={async () => {
-                                database.data = defaultData
-                                await database.write()
+                            <Button
+                                onClick={async () => {
+                                    database.data = defaultData;
+                                    await database.write();
 
-                                window.location.reload()
-
-                            }} appearance="secondary">Destroy</Button>
+                                    window.location.reload();
+                                }}
+                                appearance="secondary"
+                            >
+                                Destroy
+                            </Button>
                         </DialogTrigger>
                         <Button
                             onClick={() => {
