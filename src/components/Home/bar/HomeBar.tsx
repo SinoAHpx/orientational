@@ -1,71 +1,35 @@
 import {
-    Badge,
     Button,
     Card,
     DialogTrigger,
-    Input,
-    Popover,
-    PopoverSurface,
-    PopoverTrigger,
-    TeachingPopover,
-    TeachingPopoverBody,
-    TeachingPopoverFooter,
-    TeachingPopoverHeader,
-    TeachingPopoverSurface,
-    TeachingPopoverTitle,
-    TeachingPopoverTrigger,
-    Text,
-    Title3,
-    Tooltip,
 } from "@fluentui/react-components";
 import {
     AddRegular,
-    ChevronLeftRegular,
-    ChevronRightRegular,
-    SearchRegular,
 } from "@fluentui/react-icons";
 import Flex from "../../universal/Flex";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import SettingsDialog from "../../dialogs/SettingsDialog";
-import { ClassData, defaultClassData } from "../../../models/class-data.model";
+import { ClassData } from "../../../models/class-data.model";
 import { database } from "../../../utils/database";
 import { Settings } from "../../../models/settings.model";
 import UpdateClassDialog from "../../dialogs/UpdateClassDialog";
+import { uesGlobalState } from "../../../app/store";
+import WeekDisplay from "./WeekDisplay";
+import DataMigration from "./DataMigration";
+import SearchBar from "./SearchBar";
 import { getWeeksGap } from "../../../utils/time";
 
 export default function HomeBar({
     style,
     onAdd,
-    onWeekChange,
 }: {
     style?: React.CSSProperties;
     onAdd: (data: ClassData | null) => void;
-    onWeekChange: (week: number) => void;
 }) {
     const [showAddDialog, setShowAddDialog] = useState(false);
     const [showSettingsDialog, setShowSettingsDialog] = useState(false);
-    const [settings, setSettings] = useState(database.data.settings);
-    const [currentWeek, setCurrentWeek] = useState(
-        database.data.settings.currentWeek
-    );
-    const [searchResult, setSearchResult] = useState({
-        open: false,
-        data: defaultClassData,
-    });
+    const {settings, setSettings, setCurrentWeek} = uesGlobalState()
 
-    //this is for auto change week to present, as initially mounted
-    useEffect(() => {
-        const initialGap = getWeeksGap(
-            new Date(),
-            database.data.settings.firstWeek
-        );
-        if (currentWeek < database.data.settings.totalWeeks) {
-            setCurrentWeek(initialGap);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const searchRef = useRef<HTMLInputElement>(null);
 
     const handleAddClick = () => {
         setShowAddDialog(true);
@@ -81,83 +45,15 @@ export default function HomeBar({
 
             return;
         }
-
-        database.data.settings = { ...settings, currentWeek };
+        
+        database.data.settings = { ...settings };
         await database.write();
         setSettings(database.data.settings);
         setShowSettingsDialog(false);
 
         const weeks = getWeeksGap(new Date(), database.data.settings.firstWeek);
         //todo: add prompt if weeks is bigger than total weeks
-
         setCurrentWeek(weeks);
-    };
-
-    const handleWeek = async (type: "next" | "previous") => {
-        if (currentWeek == 1 && type == "previous") {
-            return;
-        }
-        if (
-            currentWeek == database.data.settings.totalWeeks &&
-            type == "next"
-        ) {
-            return;
-        }
-        const i = type == "next" ? 1 : -1;
-
-        setCurrentWeek(currentWeek + i);
-
-        database.data.settings.currentWeek += i;
-        await database.write();
-
-        onWeekChange(database.data.settings.currentWeek);
-    };
-
-    const handleExport = () => {
-        const json = JSON.stringify(database.data);
-        const blob = new Blob([json], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "database_export.json";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    };
-
-    const handleImport = () => {
-        const input = document.createElement("input");
-        input.type = "file";
-        input.accept = ".json";
-
-        input.onchange = (e) => {
-            const file = (e.target as HTMLInputElement).files?.[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    const content = e.target?.result;
-                    if (typeof content === "string") {
-                        database.data = JSON.parse(content);
-                        await database.write();
-                    }
-                } catch (error) {
-                    console.error("Error importing file:", error);
-                } finally {
-                    reader.onload = null;
-                    input.onchange = null;
-                    input.remove();
-
-                    window.location.reload();
-                }
-            };
-            reader.readAsText(file);
-        };
-
-        input.click();
     };
 
     return (
@@ -172,46 +68,7 @@ export default function HomeBar({
                 }}
             >
                 <Flex gap="15px">
-                    <Popover>
-                        <PopoverTrigger>
-                            <Badge
-                                color="informative"
-                                style={{
-                                    padding: "20px",
-                                    cursor: "pointer",
-                                    alignSelf: "center",
-                                }}
-                            >
-                                {new Date().toLocaleString("en-US", {
-                                    month: "long",
-                                    day: "numeric",
-                                })}
-                                {` / Week ${currentWeek}`}
-                            </Badge>
-                        </PopoverTrigger>
-                        <PopoverSurface>
-                            <Flex gap="10px">
-                                <Tooltip
-                                    content="Previous week"
-                                    relationship="label"
-                                >
-                                    <Button
-                                        onClick={() => handleWeek("previous")}
-                                    >
-                                        <ChevronLeftRegular />
-                                    </Button>
-                                </Tooltip>
-                                <Tooltip
-                                    content="Next week"
-                                    relationship="label"
-                                >
-                                    <Button onClick={() => handleWeek("next")}>
-                                        <ChevronRightRegular />
-                                    </Button>
-                                </Tooltip>
-                            </Flex>
-                        </PopoverSurface>
-                    </Popover>
+                    <WeekDisplay />
                     <Button
                         icon={<AddRegular />}
                         appearance="primary"
@@ -229,37 +86,7 @@ export default function HomeBar({
                 </Flex>
 
                 <Flex gap="15px">
-                    <Button onClick={handleExport}>Export</Button>
-                    {database.data.classes.length == 0 ? (
-                        <Button onClick={handleImport}>Import</Button>
-                    ) : (
-                        <TeachingPopover>
-                            <TeachingPopoverTrigger>
-                                <Button>Import</Button>
-                            </TeachingPopoverTrigger>
-                            <TeachingPopoverSurface>
-                                <TeachingPopoverHeader>
-                                    Tips
-                                </TeachingPopoverHeader>
-                                <TeachingPopoverBody>
-                                    <TeachingPopoverTitle>
-                                        This Action will override current
-                                        classes
-                                    </TeachingPopoverTitle>
-                                    <Text>
-                                        Press "continue" if you'd confirm.
-                                    </Text>
-                                </TeachingPopoverBody>
-                                <TeachingPopoverFooter
-                                    primary={{
-                                        onClick: handleImport,
-                                        children: "Continue",
-                                    }}
-                                    secondary="Cancel"
-                                />
-                            </TeachingPopoverSurface>
-                        </TeachingPopover>
-                    )}
+                    <DataMigration />
                     <DialogTrigger>
                         <Button onClick={handleSettingClick}>Settings</Button>
                     </DialogTrigger>
@@ -271,53 +98,7 @@ export default function HomeBar({
                 </Flex>
 
                 <Flex gap="15px">
-                    <Input ref={searchRef} placeholder="Search for classes" />
-
-                    <TeachingPopover
-                        open={searchResult.open}
-                        onOpenChange={() => {
-                            if (
-                                searchRef.current &&
-                                searchRef.current.value != ""
-                            ) {
-                                const data = database.data.classes.filter((c) =>
-                                    c.title.includes(searchRef.current!.value!)
-                                )[0];
-                                if (data === undefined || data === null) {
-                                    return;
-                                }
-
-                                setSearchResult({
-                                    open: !searchResult.open,
-                                    data,
-                                });
-                            }
-                        }}
-                    >
-                        <TeachingPopoverTrigger disableButtonEnhancement>
-                            <Button icon={<SearchRegular />}>Search</Button>
-                        </TeachingPopoverTrigger>
-                        <TeachingPopoverSurface>
-                            <TeachingPopoverHeader>
-                                Searching
-                            </TeachingPopoverHeader>
-                            <TeachingPopoverBody>
-                                <Title3>{searchResult.data.title}</Title3>
-                                <Flex gap="10px">
-                                    <Badge style={{ padding: "15px" }}>
-                                        {searchResult.data.room}
-                                    </Badge>
-                                    <Badge
-                                        color="informative"
-                                        style={{ padding: "15px" }}
-                                    >
-                                        {searchResult.data.startTime}-
-                                        {searchResult.data.endTime}
-                                    </Badge>
-                                </Flex>
-                            </TeachingPopoverBody>
-                        </TeachingPopoverSurface>
-                    </TeachingPopover>
+                    <SearchBar/>
                 </Flex>
             </Card>
         </>

@@ -33,7 +33,6 @@ export default function SettingsDialog({
         onClose?.({
             firstWeek: new Date(firstWeekRef.current?.value ?? ""),
             totalWeeks: parseInt(totalWeekRef.current?.value ?? "1"),
-            currentWeek: 1,
         });
     };
 
