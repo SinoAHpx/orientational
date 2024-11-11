@@ -26,11 +26,11 @@ import {
 } from "@fluentui/react-icons";
 import Flex from "../../universal/Flex";
 import { useEffect, useRef, useState } from "react";
-import SettingsDialog from "../../Dialogs/SettingsDialog";
+import SettingsDialog from "../../dialogs/SettingsDialog";
 import { ClassData, defaultClassData } from "../../../models/class-data.model";
 import { database } from "../../../utils/database";
 import { Settings } from "../../../models/settings.model";
-import UpdateClassDialog from "../../Dialogs/UpdateClassDialog";
+import UpdateClassDialog from "../../dialogs/UpdateClassDialog";
 import { getWeeksGap } from "../../../utils/time";
 
 export default function HomeBar({

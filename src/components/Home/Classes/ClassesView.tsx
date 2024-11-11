@@ -4,7 +4,7 @@ import { timeSequence } from "../../../utils/time";
 import Class from "./Class";
 import { useState } from "react";
 import Flex from "../../universal/Flex";
-import UpdateClassDialog from "../../Dialogs/UpdateClassDialog";
+import UpdateClassDialog from "../../dialogs/UpdateClassDialog";
 
 export default function ClassesViewer({
     extraStyle,
