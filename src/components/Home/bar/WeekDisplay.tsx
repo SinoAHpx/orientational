@@ -9,13 +9,13 @@ import {
 import { ChevronLeftRegular, ChevronRightRegular } from "@fluentui/react-icons";
 
 import Flex from "../../universal/Flex";
-import { uesGlobalState } from "../../../app/store";
+import { useGlobalState } from "../../../app/store";
 import { database } from "../../../utils/database";
 import { useEffect } from "react";
 import { getWeeksGap } from "../../../utils/time";
 
 export default function WeekDisplay() {
-    const { currentWeek, setCurrentWeek } = uesGlobalState();
+    const { currentWeek, setCurrentWeek } = useGlobalState();
 
     const handleWeek = async (type: "next" | "previous") => {
         if (currentWeek == 1 && type == "previous") {

@@ -13,7 +13,7 @@ import { ClassData } from "../../../models/class-data.model";
 import { database } from "../../../utils/database";
 import { Settings } from "../../../models/settings.model";
 import UpdateClassDialog from "../../dialogs/UpdateClassDialog";
-import { uesGlobalState } from "../../../app/store";
+import { useGlobalState } from "../../../app/store";
 import WeekDisplay from "./WeekDisplay";
 import DataMigration from "./DataMigration";
 import SearchBar from "./SearchBar";
@@ -26,34 +26,35 @@ export default function HomeBar({
     style?: React.CSSProperties;
     onAdd: (data: ClassData | null) => void;
 }) {
-    const [showAddDialog, setShowAddDialog] = useState(false);
-    const [showSettingsDialog, setShowSettingsDialog] = useState(false);
-    const {settings, setSettings, setCurrentWeek} = uesGlobalState()
-
+    // const [showAddDialog, setShowAddDialog] = useState(false);
+    // const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+    // const {settings, setSettings, setCurrentWeek} = uesGlobalState()
+    const showUpdateDialog = useGlobalState(s => s.showUpdateDialog)
+    const showSettingsDialog = useGlobalState(s => s.showSettingsDialog)
 
     const handleAddClick = () => {
-        setShowAddDialog(true);
+        showUpdateDialog()
     };
 
     const handleSettingClick = () => {
-        setShowSettingsDialog(true);
+        showSettingsDialog()
     };
 
     const handleSettings = async (settings: Settings | null) => {
-        if (settings == null) {
-            setShowSettingsDialog(false);
+        // if (settings == null) {
+        //     setShowSettingsDialog(false);
 
-            return;
-        }
+        //     return;
+        // }
         
-        database.data.settings = { ...settings };
-        await database.write();
-        setSettings(database.data.settings);
-        setShowSettingsDialog(false);
+        // database.data.settings = { ...settings };
+        // await database.write();
+        // setSettings(database.data.settings);
+        // setShowSettingsDialog(false);
 
-        const weeks = getWeeksGap(new Date(), database.data.settings.firstWeek);
-        //todo: add prompt if weeks is bigger than total weeks
-        setCurrentWeek(weeks);
+        // const weeks = getWeeksGap(new Date(), database.data.settings.firstWeek);
+        // //todo: add prompt if weeks is bigger than total weeks
+        // setCurrentWeek(weeks);
     };
 
     return (
@@ -76,13 +77,7 @@ export default function HomeBar({
                     >
                         Add
                     </Button>
-                    <UpdateClassDialog
-                        open={showAddDialog}
-                        onClose={(data) => {
-                            onAdd(data);
-                            setShowAddDialog(false);
-                        }}
-                    />
+                    
                 </Flex>
 
                 <Flex gap="15px">
@@ -90,11 +85,6 @@ export default function HomeBar({
                     <DialogTrigger>
                         <Button onClick={handleSettingClick}>Settings</Button>
                     </DialogTrigger>
-                    <SettingsDialog
-                        settings={settings}
-                        open={showSettingsDialog}
-                        onClose={handleSettings}
-                    />
                 </Flex>
 
                 <Flex gap="15px">

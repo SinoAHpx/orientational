@@ -5,6 +5,7 @@ import Class from "./Class";
 import { useState } from "react";
 import Flex from "../../universal/Flex";
 import UpdateClassDialog from "../../dialogs/UpdateClassDialog";
+import { useGlobalState } from "../../../app/store";
 
 export default function ClassesViewer({
     extraStyle,
@@ -15,14 +16,16 @@ export default function ClassesViewer({
     classes: ClassData[];
     onEdit: (data: ClassData | null) => void;
 }) {
-    const [edit, setEdit] = useState({
-        open: false,
-        data: defaultClassData,
-    });
+    // const [edit, setEdit] = useState({
+    //     open: false,
+    //     data: defaultClassData,
+    // });
+
+    const showUpdateDialog = useGlobalState(s => s.showUpdateDialog)
 
     return (
         <>
-            <UpdateClassDialog
+            {/* <UpdateClassDialog
                 open={edit.open}
                 data={edit.data}
                 onClose={(data) => {
@@ -33,7 +36,7 @@ export default function ClassesViewer({
 
                     onEdit(data);
                 }}
-            />
+            /> */}
             {classes.length != 0 ? (
                 <div
                     style={{
@@ -90,10 +93,11 @@ export default function ClassesViewer({
                             <Class
                                 data={cls}
                                 onClick={(data) => {
-                                    setEdit({
-                                        open: true,
-                                        data: data,
-                                    });
+                                    // setEdit({
+                                    //     open: true,
+                                    //     data: data,
+                                    // });
+                                    showUpdateDialog()
                                 }}
                             />
                         ))}

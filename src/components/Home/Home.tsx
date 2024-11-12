@@ -4,9 +4,13 @@ import HomeBar from "./bar/HomeBar";
 import { database, pushData, updateData } from "../../utils/database";
 import { ClassData } from "../../models/class-data.model";
 import { getClassVisibility } from "../../utils/time";
+import { useGlobalState } from "../../app/store";
+import Dialogs from "../dialogs/Dialogs";
 
 export default function Home() {
     const [classes, setClasses] = useState<ClassData[]>([]);
+    const currentWeek = useGlobalState(s => s.currentWeek)
+
     useEffect(() => {
         setClasses(database.data.classes);
     }, []);
@@ -19,7 +23,7 @@ export default function Home() {
         const newData = {
             ...data,
             visible: getClassVisibility(
-                database.data.settings.currentWeek,
+                currentWeek,
                 data
             ),
         };
@@ -49,6 +53,7 @@ export default function Home() {
 
     return (
         <>
+            <Dialogs />
             <HomeBar
                 style={{
                     position: "sticky",
@@ -61,7 +66,6 @@ export default function Home() {
                     zIndex: 1000,
                 }}
                 onAdd={(d) => handleEdit(d, "add")}
-                onWeekChange={handleWeekChange}
             />
             <div
                 style={{
