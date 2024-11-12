@@ -64,16 +64,7 @@ export const useGlobalState = create<GlobalState & GlobalAction>((set) => ({
             })
         ),
     hideUpdateDialog: () =>
-        set(
-            produce((state) => ({
-                state.dialog.update = {
-                    open: false
-                }
-            }))
-        ),
+        set(produce((state) => (state.dialog.update.open = false))),
     hideSettingsDialog: () =>
-        set((state) => ({
-            ...state,
-            dialog: { update: false, settings: false },
-        })),
+        set(produce((state) => (state.dialog.settings.open = false))),
 }));
