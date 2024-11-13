@@ -7,28 +7,16 @@ import {
     AddRegular,
 } from "@fluentui/react-icons";
 import Flex from "../../universal/Flex";
-import { useState } from "react";
-import SettingsDialog from "../../dialogs/SettingsDialog";
-import { ClassData } from "../../../models/class-data.model";
-import { database } from "../../../utils/database";
-import { Settings } from "../../../models/settings.model";
-import UpdateClassDialog from "../../dialogs/UpdateClassDialog";
 import { useGlobalState } from "../../../app/store";
 import WeekDisplay from "./WeekDisplay";
 import DataMigration from "./DataMigration";
 import SearchBar from "./SearchBar";
-import { getWeeksGap } from "../../../utils/time";
 
 export default function HomeBar({
     style,
-    onAdd,
 }: {
     style?: React.CSSProperties;
-    onAdd: (data: ClassData | null) => void;
 }) {
-    // const [showAddDialog, setShowAddDialog] = useState(false);
-    // const [showSettingsDialog, setShowSettingsDialog] = useState(false);
-    // const {settings, setSettings, setCurrentWeek} = uesGlobalState()
     const showUpdateDialog = useGlobalState(s => s.showUpdateDialog)
     const showSettingsDialog = useGlobalState(s => s.showSettingsDialog)
 
@@ -38,23 +26,6 @@ export default function HomeBar({
 
     const handleSettingClick = () => {
         showSettingsDialog()
-    };
-
-    const handleSettings = async (settings: Settings | null) => {
-        // if (settings == null) {
-        //     setShowSettingsDialog(false);
-
-        //     return;
-        // }
-        
-        // database.data.settings = { ...settings };
-        // await database.write();
-        // setSettings(database.data.settings);
-        // setShowSettingsDialog(false);
-
-        // const weeks = getWeeksGap(new Date(), database.data.settings.firstWeek);
-        // //todo: add prompt if weeks is bigger than total weeks
-        // setCurrentWeek(weeks);
     };
 
     return (

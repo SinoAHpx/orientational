@@ -3,6 +3,8 @@ import { defaultSettings, Settings } from "../models/settings.model";
 import { Dialog } from "@fluentui/react-components";
 import { ClassData, defaultClassData } from "../models/class-data.model";
 import { produce } from "immer";
+import { database, updateData, updateSettings } from "../utils/database";
+import { getClassVisibility } from "../utils/time";
 
 interface DialogData<T> {
     open: boolean;
@@ -18,17 +20,41 @@ interface GlobalState {
     currentWeek: number;
     settings: Settings;
     dialog: Dialog;
+    classes: ClassData[];
 }
 
 interface GlobalAction {
     setSettings: (settings: Settings | null) => void;
     setCurrentWeek: (week: number) => void;
+    setClasses: (classes: ClassData[]) => void;
+
     showUpdateDialog: (classData?: ClassData | null) => void;
     showSettingsDialog: (settings?: Settings | null) => void;
-    hideUpdateDialog: () => void;
-    hideSettingsDialog: () => void;
+    closeUpdateDialog: (classData?: ClassData | null) => void;
+    closeSettingsDialog: (settings?: Settings | null) => void;
 }
 
+const setDialogState = (
+    draft: any,
+    type: "update" | "settings",
+    isOpen: boolean,
+    data: any
+) => {
+    draft.dialog[type].open = isOpen;
+    draft.dialog[type].data = data;
+    if (!isOpen && data !== null && data !== undefined) {
+        if (type == "update") {
+            updateData(data);
+            data.visible = getClassVisibility(
+                database.data.memory.currentWeek,
+                data
+            );
+        }
+        if (type == "settings") {
+            updateSettings(data);
+        }
+    }
+};
 export const useGlobalState = create<GlobalState & GlobalAction>((set) => ({
     currentWeek: 0,
     settings: defaultSettings,
@@ -42,33 +68,36 @@ export const useGlobalState = create<GlobalState & GlobalAction>((set) => ({
             data: defaultSettings,
         },
     },
+    classes: [],
+    setClasses: (classes) =>
+        set(
+            produce((draft) => {
+                draft.classes = classes.map((cls) => ({
+                    ...cls,
+                    visible: getClassVisibility(
+                        database.data.memory.currentWeek,
+                        cls
+                    ),
+                }));
+            })
+        ),
     setSettings: (settings) =>
         set((state) => ({ ...state, settings: settings || state.settings })),
     setCurrentWeek: (week) => set((state) => ({ ...state, currentWeek: week })),
-    showUpdateDialog: (data?: ClassData | null) =>
+    showUpdateDialog: (data) =>
+        set(produce((draft) => setDialogState(draft, "update", true, data))),
+    showSettingsDialog: (settings) =>
         set(
-            produce((draft) => {
-                draft.dialog.update.open = true;
-                draft.dialog.update.data = data;
-            })
+            produce((draft) =>
+                setDialogState(draft, "settings", true, settings)
+            )
         ),
-    showSettingsDialog: (settings?: Settings | null) =>
+    closeUpdateDialog: (data) =>
+        set(produce((draft) => setDialogState(draft, "update", false, data))),
+    closeSettingsDialog: (settings) =>
         set(
-            produce((draft) => {
-                draft.dialog.settings.open = true;
-                draft.dialog.settings.data = settings;
-            })
-        ),
-    hideUpdateDialog: () =>
-        set(
-            produce((draft) => {
-                draft.dialog.update.open = false;
-            })
-        ),
-    hideSettingsDialog: () =>
-        set(
-            produce((draft) => {
-                draft.dialog.settings.open = false;
-            })
+            produce((draft) =>
+                setDialogState(draft, "settings", false, settings)
+            )
         ),
 }));

@@ -10,12 +10,12 @@ import { ChevronLeftRegular, ChevronRightRegular } from "@fluentui/react-icons";
 
 import Flex from "../../universal/Flex";
 import { useGlobalState } from "../../../app/store";
-import { database } from "../../../utils/database";
+import { database, updateCurrentWeek } from "../../../utils/database";
 import { useEffect } from "react";
 import { getWeeksGap } from "../../../utils/time";
 
 export default function WeekDisplay() {
-    const { currentWeek, setCurrentWeek } = useGlobalState();
+    const { currentWeek, setCurrentWeek, setClasses } = useGlobalState();
 
     const handleWeek = async (type: "next" | "previous") => {
         if (currentWeek == 1 && type == "previous") {
@@ -28,13 +28,14 @@ export default function WeekDisplay() {
             return;
         }
         const i = type == "next" ? 1 : -1;
+        const week = currentWeek + i;
 
-        setCurrentWeek(currentWeek + i);
+        setCurrentWeek(week);
 
-        // database.data.memory.currentWeek = currentWeek + i;
-        await database.write();
+        setClasses(database.data.classes);
     };
 
+    // set initial week
     useEffect(() => {
         const initialGap = getWeeksGap(
             new Date(),
@@ -45,6 +46,10 @@ export default function WeekDisplay() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        updateCurrentWeek(currentWeek);
+    }, [currentWeek]);
 
     return (
         <Popover>

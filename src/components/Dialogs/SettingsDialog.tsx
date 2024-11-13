@@ -16,33 +16,33 @@ import { useRef } from "react";
 import { Settings } from "../../models/settings.model";
 import Flex from "../universal/Flex";
 import { database, defaultData } from "../../utils/database";
+import { useGlobalState } from "../../app/store";
 
 export default function SettingsDialog({
     open,
-    onClose,
     settings = null,
 }: {
     open: boolean;
-    onClose?: (settings: Settings | null) => void;
     settings?: Settings | null;
 }) {
+    const hideSettings = useGlobalState(s => s.closeSettingsDialog)
+
     const firstWeekRef = useRef<HTMLInputElement>(null);
     const totalWeekRef = useRef<HTMLInputElement>(null);
 
     const onSave = () => {
-        onClose?.({
-            firstWeek: new Date(firstWeekRef.current?.value ?? ""),
-            totalWeeks: parseInt(totalWeekRef.current?.value ?? "1"),
-        });
+        // onClose?.({
+        //     firstWeek: new Date(firstWeekRef.current?.value ?? ""),
+        //     totalWeeks: parseInt(totalWeekRef.current?.value ?? "1"),
+        // });
+        hideSettings()
     };
 
     return (
         <Dialog
             open={open}
             onOpenChange={() => {
-                if (onClose) {
-                    onClose(null);
-                }
+                hideSettings()
             }}
         >
             <DialogSurface>

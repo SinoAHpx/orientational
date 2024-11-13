@@ -11,7 +11,6 @@ export default function ClassesViewer({
 }: {
     extraStyle?: React.CSSProperties;
     classes: ClassData[];
-    onEdit: (data: ClassData | null) => void;
 }) {
     const showUpdateDialog = useGlobalState((s) => s.showUpdateDialog);
 

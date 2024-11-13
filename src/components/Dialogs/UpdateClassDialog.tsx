@@ -25,17 +25,19 @@ import Flex from "../universal/Flex";
 import { TimePicker } from "@fluentui/react-timepicker-compat";
 import { getTimeStamp, timeLocalizer } from "../../utils/time";
 import { useRef } from "react";
+import { useGlobalState } from "../../app/store";
+import { database } from "../../utils/database";
 
 export default function UpdateClassDialog({
     open,
     data = null,
-    onClose,
 }: {
     open: boolean;
     data?: ClassData | null;
-    onClose: (data: ClassData | null) => void;
 }) {
     const isEdit = data != null;
+    const closeUpdate = useGlobalState((s) => s.closeUpdateDialog);
+    const setClasses = useGlobalState((s) => s.setClasses);
 
     const titleRef = useRef<HTMLInputElement>(null);
     const roomRef = useRef<HTMLInputElement>(null);
@@ -58,13 +60,12 @@ export default function UpdateClassDialog({
         );
 
     const handleClose = () => {
-        onClose(null);
+        closeUpdate();
     };
 
     const handleDelete = () => {
-        if (isEdit) {
-            onClose({ ...data!, title: "delete" });
-        }
+        closeUpdate({ ...data!, title: "delete" });
+        setClasses(database.data.classes);
     };
 
     const handleSave = () => {
@@ -103,7 +104,8 @@ export default function UpdateClassDialog({
             }
             //#endregion
 
-            onClose(newClassData);
+            closeUpdate(newClassData);
+            setClasses(database.data.classes);
         }
     };
 

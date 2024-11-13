@@ -1,55 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ClassesViewer from "./classes/ClassesView";
 import HomeBar from "./bar/HomeBar";
-import { database, pushData, updateData } from "../../utils/database";
-import { ClassData } from "../../models/class-data.model";
-import { getClassVisibility } from "../../utils/time";
+import { database } from "../../utils/database";
 import { useGlobalState } from "../../app/store";
 import Dialogs from "../dialogs/Dialogs";
 
 export default function Home() {
-    const [classes, setClasses] = useState<ClassData[]>([]);
-    const currentWeek = useGlobalState(s => s.currentWeek)
+    const classes = useGlobalState(s => s.classes)
+    const setClasses = useGlobalState(s => s.setClasses)
 
     useEffect(() => {
         setClasses(database.data.classes);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const handleEdit = async (data: ClassData | null, type: "add" | "edit") => {
-        if (data == null) {
-            return;
-        }
-
-        const newData = {
-            ...data,
-            visible: getClassVisibility(
-                currentWeek,
-                data
-            ),
-        };
-
-        if (type == "add") {
-            await pushData(newData);
-        } else {
-            await updateData(newData);
-        }
-
-        setClasses([...database.data.classes]);
-    };
-
-    const handleWeekChange = async (currentWeek: number) => {
-        database.data.classes = database.data.classes.map((cls) => {
-            return {
-                ...cls,
-                visible: getClassVisibility(currentWeek, cls),
-            };
-        });
-        await database.write();
-
-        setClasses([...database.data.classes]);
-    };
-
-
 
     return (
         <>
@@ -65,7 +28,6 @@ export default function Home() {
                     margin: "auto",
                     zIndex: 1000,
                 }}
-                onAdd={(d) => handleEdit(d, "add")}
             />
             <div
                 style={{
@@ -81,7 +43,6 @@ export default function Home() {
                 <div style={{ flex: 1 }}>
                     <ClassesViewer
                         classes={classes}
-                        onEdit={(d) => handleEdit(d, "edit")}
                     />
                 </div>
             </div>
