@@ -47,24 +47,28 @@ export const useGlobalState = create<GlobalState & GlobalAction>((set) => ({
     setCurrentWeek: (week) => set((state) => ({ ...state, currentWeek: week })),
     showUpdateDialog: (data?: ClassData | null) =>
         set(
-            produce((state) => {
-                state.dialog.update = {
-                    open: true,
-                    data,
-                };
+            produce((draft) => {
+                draft.dialog.update.open = true;
+                draft.dialog.update.data = data;
             })
         ),
     showSettingsDialog: (settings?: Settings | null) =>
         set(
-            produce((state) => {
-                state.dialog.settings = {
-                    open: true,
-                    settings,
-                };
+            produce((draft) => {
+                draft.dialog.settings.open = true;
+                draft.dialog.settings.data = settings;
             })
         ),
     hideUpdateDialog: () =>
-        set(produce((state) => (state.dialog.update.open = false))),
+        set(
+            produce((draft) => {
+                draft.dialog.update.open = false;
+            })
+        ),
     hideSettingsDialog: () =>
-        set(produce((state) => (state.dialog.settings.open = false))),
+        set(
+            produce((draft) => {
+                draft.dialog.settings.open = false;
+            })
+        ),
 }));

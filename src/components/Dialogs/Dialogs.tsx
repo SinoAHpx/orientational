@@ -11,14 +11,14 @@ export default function Dialogs() {
     return (
         <>
             <UpdateClassDialog
-                open={dialog.update}
-                onClose={(data) => {
+                open={dialog.update.open}
+                onClose={() => {
                     hideUpdate()
                 }}
             />
             <SettingsDialog
                         settings={database.data.settings}
-                        open={dialog.settings}
+                        open={dialog.settings.open}
                         onClose={() => {
                             hideSettings()
                         }}
