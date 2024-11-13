@@ -12,6 +12,7 @@ export default function Dialogs() {
         <>
             <UpdateClassDialog
                 open={dialog.update.open}
+                data={dialog.update.data}
                 onClose={() => {
                     hideUpdate()
                 }}

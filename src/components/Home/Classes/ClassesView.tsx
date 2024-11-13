@@ -1,41 +1,22 @@
 import { Title1, Subtitle1 } from "@fluentui/react-components";
-import { ClassData, defaultClassData } from "../../../models/class-data.model";
+import { ClassData } from "../../../models/class-data.model";
 import { timeSequence } from "../../../utils/time";
 import Class from "./Class";
-import { useState } from "react";
 import Flex from "../../universal/Flex";
 import { useGlobalState } from "../../../app/store";
 
 export default function ClassesViewer({
     extraStyle,
     classes,
-    onEdit,
 }: {
     extraStyle?: React.CSSProperties;
     classes: ClassData[];
     onEdit: (data: ClassData | null) => void;
 }) {
-    // const [edit, setEdit] = useState({
-    //     open: false,
-    //     data: defaultClassData,
-    // });
-
-    const showUpdateDialog = useGlobalState(s => s.showUpdateDialog)
+    const showUpdateDialog = useGlobalState((s) => s.showUpdateDialog);
 
     return (
         <>
-            {/* <UpdateClassDialog
-                open={edit.open}
-                data={edit.data}
-                onClose={(data) => {
-                    setEdit({
-                        ...edit,
-                        open: false,
-                    });
-
-                    onEdit(data);
-                }}
-            /> */}
             {classes.length != 0 ? (
                 <div
                     style={{
@@ -92,11 +73,7 @@ export default function ClassesViewer({
                             <Class
                                 data={cls}
                                 onClick={(data) => {
-                                    // setEdit({
-                                    //     open: true,
-                                    //     data: data,
-                                    // });
-                                    showUpdateDialog()
+                                    showUpdateDialog(data);
                                 }}
                             />
                         ))}
