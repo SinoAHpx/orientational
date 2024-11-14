@@ -12,7 +12,6 @@ import Flex from "../../universal/Flex";
 import { useGlobalState } from "../../../app/store";
 import { database, updateCurrentWeek } from "../../../utils/database";
 import { useEffect } from "react";
-import { getWeeksGap } from "../../../utils/time";
 
 export default function WeekDisplay() {
     const { currentWeek, setCurrentWeek, setClasses } = useGlobalState();
@@ -33,23 +32,15 @@ export default function WeekDisplay() {
         setCurrentWeek(week);
 
         setClasses(database.data.classes);
+        updateCurrentWeek(week);
+
     };
 
     // set initial week
     useEffect(() => {
-        const initialGap = getWeeksGap(
-            new Date(),
-            database.data.settings.firstWeek
-        );
-        if (currentWeek < database.data.settings.totalWeeks) {
-            setCurrentWeek(initialGap);
-        }
+        setCurrentWeek(database.data.memory.currentWeek)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    useEffect(() => {
-        updateCurrentWeek(currentWeek);
-    }, [currentWeek]);
 
     return (
         <Popover>
